@@ -1,11 +1,15 @@
 #[macro_use] extern crate rocket;
+use rocket::fs::{FileServer, relative};
+use rocket_dyn_templates::{Template, context};
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, Krusty!"
+fn index() -> Template {
+    Template::render("index", context! {})
 }
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+        .mount("/", routes![index])
+        .attach(Template::fairing())
 }
