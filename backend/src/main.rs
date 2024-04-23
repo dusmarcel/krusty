@@ -10,6 +10,7 @@ fn index() -> Template {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
+        .mount("/pkg", FileServer::from(relative!("frontend/pkg")))
         .mount("/", routes![index])
         .attach(Template::fairing())
 }
