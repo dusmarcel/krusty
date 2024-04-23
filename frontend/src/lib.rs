@@ -7,6 +7,6 @@ fn app() -> Html {
     }
 }
 
-pub fn main() {
+pub fn update() {
     yew::Renderer::<App>::new().render();
 }
