@@ -15,7 +15,7 @@ RUN --mount=type=bind,source=src,target=src \
     --mount=type=cache,target=/usr/local/cargo/git/db \
     --mount=type=cache,target=/usr/local/cargo/registry/ \
     --mount=type=bind,source=index.html,target=index.html \
-    --mount=type=bind,source=tailwind.css,target=tailwind.css \
+    --mount=type=bind,source=styles.css,target=styles.css \
     trunk build --release
 
 FROM nginx:latest AS final
