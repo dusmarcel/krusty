@@ -1,8 +1,8 @@
 ARG RUST_VERSION=1.82
-ARG APP_NAME=frontend
+# ARG PKG=frontend
 
 FROM rust:${RUST_VERSION}-bookworm AS build
-ARG APP_NAME
+# ARG APP_NAME
 WORKDIR /app
 
 RUN rustup target add wasm32-unknown-unknown

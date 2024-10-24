@@ -4,6 +4,11 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      target: final
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend
     ports:
       - 8765:8000
   frontend:
@@ -15,6 +20,6 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: .
+          path: ./frontend
     ports:
       - 8000:80
