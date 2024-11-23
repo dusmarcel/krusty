@@ -1,3 +1,5 @@
+<strong>Below you find the automatically by docker init generated README file. Use with caution and at your own risk. Maybe I will update this file when its time has come.</strong>
+
 ### Building and running your application
 
 When you're ready, start your application by running:
