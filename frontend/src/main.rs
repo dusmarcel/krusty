@@ -1,3 +1,33 @@
-fn main() {
-    println!("Hello, world!");
+include!("../backend_config.rs");
+use yew::prelude::*;
+use js_sys::JsString;
+use gloo_net::http::Request;
+
+#[function_component(App)]
+fn app() -> Html {
+    let request_result = use_state(|| "No result yet. Try clicking on \"Get Actor\"".to_string());
+    let result = request_result.clone();
+
+    let onclick = Callback::from(move |_| {
+        let result = request_result.clone();
+
+        wasm_bindgen_futures::spawn_local(async move {
+            let backend_url = BACKEND_URL.to_string();
+            let backend_msg = Request::get(&backend_url).send().await.unwrap().text().await.unwrap();
+            web_sys::console::log_1(&JsString::from(backend_msg.clone()));
+            result.set(backend_msg);
+        })
+    });
+
+    html! {
+        <>
+            <h1>{ "Hello, Krusty!" }</h1>
+            <button onclick={onclick}>{ "Get Actor" }</button>
+            <p>{ format!("{}", *result) }</p>
+        </>
+    }
+}
+
+fn main () {
+    yew::Renderer::<App>::new().render();
 }
