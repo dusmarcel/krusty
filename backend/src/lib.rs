@@ -4,8 +4,8 @@ use anyhow::Result;
 
 mod actor;
 mod key;
-//pub mod webfinger;
-//pub mod link;
+pub mod webfinger;
+pub mod link;
 
 use crate::actor::Actor;
 

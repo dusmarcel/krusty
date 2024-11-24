@@ -16,10 +16,62 @@ async fn user(backend: web::Data<Backend>, path: web::Path<String>) -> Result<im
         if *b_user == user {
             Ok(web::Json(backend.actor.to_shared()))
         } else {
-            Err(error::ErrorNotFound("User not found!"))
+            Err(error::ErrorNotFound("Not found!"))
         }
     } else {
-        Err(error::ErrorInternalServerError("No user found!"))
+        Err(error::ErrorInternalServerError("Internal server error!"))
+    }
+}
+
+#[get("/.well-known/webfinger?{resource}")]
+async fn webfinger(backend: web::Data<Backend>, path: web::Path<String>) -> Result<impl Responder> {
+    let resource = path.into_inner();
+    if let Some(host) =  &backend.host {
+        if let Some(b_user) = &backend.user {
+            let resource_parts: Vec<&str> = resource.split(':').collect();
+            if resource_parts.len() == 2 {
+                if let Some(first_part) = resource_parts.get(0) {
+                    if *first_part == "acct" {
+                        if let Some(second_part) = resource_parts.get(1) {
+                            let acct_parts: Vec<&str> = second_part.split('@').collect();
+                            if acct_parts.len() == 2 {
+                                if let Some(first_part) = acct_parts.get(0) {
+                                    if *first_part == b_user {
+                                        if let Some(second_part) = acct_parts.get(1) {
+                                            if *second_part == host {
+                                                Ok(web::Json(backend::webfinger::Webfinger::new(host, b_user)))
+                                            } else {
+                                                Err(error::ErrorNotFound("Not found!"))
+                                            }
+                                        } else {
+                                            Err(error::ErrorNotFound("Not found!"))
+                                        }
+                                    } else {
+                                        Err(error::ErrorNotFound("Not found!"))
+                                    }
+                                } else {
+                                    Err(error::ErrorNotFound("Not found!"))
+                                }
+                            } else {
+                                Err(error::ErrorNotFound("Not found!"))
+                            }
+                        } else {
+                            Err(error::ErrorNotFound("Not found!"))
+                        }
+                    } else {
+                        Err(error::ErrorInternalServerError("Internal server error!"))
+                    }
+                } else {
+                    Err(error::ErrorInternalServerError("Internal server error!"))
+                }
+            } else {
+                Err(error::ErrorInternalServerError("Internal server error!"))
+            }
+        } else {
+            Err(error::ErrorInternalServerError("Internal server error!"))
+        }
+    } else {
+        Err(error::ErrorInternalServerError("Internal server error!"))
     }
 }
 
@@ -35,6 +87,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(backend.clone()))
             .service(back)
             .service(user)
+            .service(webfinger)
     })
     .bind((BACKEND_IF, 8161))?
     .run()
