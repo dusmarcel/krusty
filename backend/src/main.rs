@@ -23,7 +23,7 @@ async fn user(backend: web::Data<Backend>, path: web::Path<String>) -> Result<im
     }
 }
 
-#[get("/.well-known/webfinger?{resource}")]
+#[get("/.well-known/webfinger?resource={resource}")]
 async fn webfinger(backend: web::Data<Backend>, path: web::Path<String>) -> Result<impl Responder> {
     let resource = path.into_inner();
     if let Some(host) =  &backend.host {
