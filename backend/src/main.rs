@@ -1,3 +1,4 @@
+include!("../backend_config.rs");
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 
 #[get("/back")]
@@ -11,7 +12,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(back)
     })
-    .bind(("127.0.0.1", 8161))?
+    .bind((BACKEND_IF, 8161))?
     .run()
     .await
 }

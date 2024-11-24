@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+      args:
+        BACKEND_IF: $BACKEND_IF
       target: final
     develop:
       watch:
@@ -13,7 +15,7 @@ services:
         - action: rebuild
           path: ./shared
     ports:
-      - 8161:8161
+      - 127.0.0.1:8161:8161
   frontend:
     container_name: frontend
     build:

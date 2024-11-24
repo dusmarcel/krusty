@@ -1,6 +1,4 @@
-ARG RUST_VERSION=1.82
-
-FROM rust:${RUST_VERSION}-bookworm AS build
+FROM rust:latest AS build
 WORKDIR /app
 ARG BACKEND_PROTOCOL
 ARG BACKEND_HOST
