@@ -2,7 +2,7 @@ include!("../backend_config.rs");
 
 use actix_web::{error, get, web, App, HttpResponse, HttpServer, Responder, Result};
 
-use backend::Backend;
+use backend::{Backend, Resource};
 
 #[get("/back")]
 async fn back() -> impl Responder {
@@ -24,8 +24,8 @@ async fn user(backend: web::Data<Backend>, path: web::Path<String>) -> Result<im
 }
 
 #[get("/.well-known/webfinger")]
-async fn webfinger(backend: web::Data<Backend>, query: web::Query<String>) -> Result<impl Responder> {
-    let resource = query.into_inner();
+async fn webfinger(backend: web::Data<Backend>, query: web::Query<Resource>) -> Result<impl Responder> {
+    let resource = query.into_inner().resource;
     if let Some(host) =  &backend.host {
         if let Some(b_user) = &backend.user {
             let resource_parts: Vec<&str> = resource.split(':').collect();

@@ -1,6 +1,7 @@
 use std::env;
 
 use anyhow::Result;
+use serde::Deserialize;
 
 mod actor;
 mod key;
@@ -8,6 +9,11 @@ pub mod webfinger;
 pub mod link;
 
 use crate::actor::Actor;
+
+#[derive(Deserialize)]
+pub struct Resource {
+    pub resource: String,
+}
 
 #[derive(Clone)]
 pub struct Backend {
