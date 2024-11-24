@@ -23,9 +23,9 @@ async fn user(backend: web::Data<Backend>, path: web::Path<String>) -> Result<im
     }
 }
 
-#[get("/.well-known/webfinger?resource={resource}")]
-async fn webfinger(backend: web::Data<Backend>, path: web::Path<String>) -> Result<impl Responder> {
-    let resource = path.into_inner();
+#[get("/.well-known/webfinger")]
+async fn webfinger(backend: web::Data<Backend>, query: web::Query<String>) -> Result<impl Responder> {
+    let resource = query.into_inner();
     if let Some(host) =  &backend.host {
         if let Some(b_user) = &backend.user {
             let resource_parts: Vec<&str> = resource.split(':').collect();
