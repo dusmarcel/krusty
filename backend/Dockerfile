@@ -5,7 +5,8 @@ ENV BACKEND_IF=$BACKEND_IF
 COPY . .
 RUN cargo build --release
 
-FROM debian:latest AS final
+FROM debian:stable-slim AS final
+RUN apt update && apt install -y libssl3
 WORKDIR /app
 COPY --from=build /build/target/release/backend backend
 USER 1001

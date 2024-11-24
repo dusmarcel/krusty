@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use crate::key::Key;
 
-#[derive(Clone, Serialize)]
+#[derive(Serialize)]
 pub struct Actor {
     #[serde(rename="@context")]
     pub context: Vec<String>,

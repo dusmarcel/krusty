@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-#[derive(Clone, Serialize)]
+#[derive(Serialize)]
 pub struct Key {
     pub id: String,
     pub owner: String,
