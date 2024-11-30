@@ -45,5 +45,5 @@ async fn back() -> impl Responder {
 
 #[post("/back/login")]
 async fn login() ->impl Responder {
-    Redirect::to("/")
+    Redirect::to("/").see_other()
 }
