@@ -1,9 +1,11 @@
 use std::env;
 
 use anyhow::Result;
+use actix_web::{get, HttpResponse, Responder};
 
 mod actor;
 mod key;
+pub mod user;
 pub mod webfinger;
 pub mod link;
 
@@ -34,4 +36,9 @@ impl Backend {
             actor,
         })
     }
+}
+
+#[get("/back")]
+async fn back() -> impl Responder {
+    HttpResponse::Ok().body("Hello from Krusty!")
 }
