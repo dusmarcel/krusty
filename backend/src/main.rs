@@ -1,8 +1,9 @@
 include!("../backend_config.rs");
 
+use serde::Deserialize;
 use actix_web::{error, get, web, App, HttpResponse, HttpServer, Responder, Result};
 
-use backend::{Backend, Resource};
+use backend::Backend;
 
 #[get("/back")]
 async fn back() -> impl Responder {
@@ -21,6 +22,11 @@ async fn user(backend: web::Data<Backend>, path: web::Path<String>) -> Result<im
     } else {
         Err(error::ErrorInternalServerError("Internal server error!"))
     }
+}
+
+#[derive(Deserialize)]
+pub struct Resource {
+    pub resource: String,
 }
 
 #[get("/.well-known/webfinger")]
