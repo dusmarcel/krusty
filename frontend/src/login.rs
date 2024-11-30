@@ -3,6 +3,17 @@ use yew::prelude::*;
 #[function_component(Login)]
 pub fn login() -> Html {
     html! {
-        <p>{ "Login" }</p>
+        <>
+            <h1>{ "Login" }</h1>
+            <form>
+                <label>{ "Username" }
+                    <input type="text" placeholder="Enter Username" name="username" />
+                </label>
+                <label>{ "Passwort" }
+                    <input type="password" placeholder="Enter Password" name="password" />
+                </label>
+                <button type="submit">{ "Login" }</button>
+            </form>
+        </>
     }
 }

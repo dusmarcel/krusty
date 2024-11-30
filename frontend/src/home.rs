@@ -5,7 +5,7 @@ use gloo_net::http::Request;
 
 #[function_component(Home)]
 pub fn home() -> Html {
-    let request_result = use_state(|| "No result yet. Try clicking on \"Get Actor\"".to_string());
+    let request_result = use_state(|| "No result yet. Try clicking on \"Say hello!\"".to_string());
     let result = request_result.clone();
 
     let onclick = Callback::from(move |_| {
@@ -22,7 +22,7 @@ pub fn home() -> Html {
     html! {
         <>
             <h1>{ "Hello, Krusty!" }</h1>
-            <button onclick={onclick}>{ "Get Actor" }</button>
+            <button onclick={onclick}>{ "Say hello!" }</button>
             <p>{ format!("{}", *result) }</p>
         </>
     }
