@@ -2,7 +2,7 @@ include!("../backend_config.rs");
 
 use actix_web::{web, App, HttpServer};
 
-use backend::{Backend, back, user::user, webfinger::webfinger};
+use backend::{Backend, back, login, user::user, webfinger::webfinger};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -15,6 +15,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(backend.clone()))
             .service(back)
+            .service(login)
             .service(user)
             .service(webfinger)
     })

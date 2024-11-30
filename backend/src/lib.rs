@@ -1,7 +1,7 @@
 use std::env;
 
 use anyhow::Result;
-use actix_web::{get, HttpResponse, Responder};
+use actix_web::{get, post, web::Redirect, HttpResponse, Responder};
 
 mod actor;
 mod key;
@@ -41,4 +41,9 @@ impl Backend {
 #[get("/back")]
 async fn back() -> impl Responder {
     HttpResponse::Ok().body("Hello from Krusty!")
+}
+
+#[post("/back/login")]
+async fn login() ->impl Responder {
+    Redirect::to("/")
 }
