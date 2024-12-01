@@ -16,7 +16,9 @@ pub fn home() -> Html {
                 let backend_msg = Request::get(&backend_url).send().await.unwrap().text().await.unwrap();
                 web_sys::console::log_1(&JsString::from(backend_msg.clone()));
                 result.set(backend_msg);
-            })            
+            });
+
+            || ()
         });
     }
 
