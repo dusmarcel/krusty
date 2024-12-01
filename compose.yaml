@@ -18,6 +18,10 @@ services:
       context: .
       dockerfile: backend/Dockerfile
       args:
+        POSTGRES_HOST: $POSTGRES_HOST
+        POSTGRES_DATABASE: $POSTGRES_DATABASE
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
         BACKEND_IF: $BACKEND_IF
       target: final
     develop:
