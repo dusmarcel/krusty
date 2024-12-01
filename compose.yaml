@@ -46,3 +46,6 @@ services:
           path: ./frontend
     ports:
       - 127.0.0.1:8162:80
+
+volumes:
+  pgdata:
