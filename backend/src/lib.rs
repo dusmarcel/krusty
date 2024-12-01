@@ -1,7 +1,10 @@
+include!("../database_config.rs");
+
 use std::env;
 
 use anyhow::Result;
 use actix_web::{get, post, web::Redirect, HttpResponse, Responder};
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 mod actor;
 mod key;
@@ -16,10 +19,11 @@ pub struct Backend {
     pub host: Option<String>,
     pub user: Option<String>,
     pub actor: Actor,
+    pub pool: Pool<Postgres>,
 }
 
 impl Backend {
-    pub fn new () -> Result<Self> {
+    pub async fn new () -> Result<Self> {
         let mut host = None;
         if let Ok(env_host) = env::var("HOST") {
             host = Some(env_host.clone());
@@ -30,10 +34,16 @@ impl Backend {
         }
         let actor = Actor::new(&host, &user)?;
 
+        let pool = PgPoolOptions::new()
+            .max_connections(8)
+            .connect(DATABASE_URL)
+            .await?;
+
         Ok(Self {
             host,
             user,
             actor,
+            pool,
         })
     }
 }
