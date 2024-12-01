@@ -23,4 +23,5 @@ target/
 .env
 frontend/backend_config.rs
 frontend/dist
+backend/database_config.rs
 backend/backend_config.rs

@@ -1,3 +1,4 @@
+include!("../database_config.rs");
 include!("../backend_config.rs");
 
 use actix_web::{web, App, HttpServer};
