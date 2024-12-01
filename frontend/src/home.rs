@@ -10,7 +10,7 @@ pub fn home() -> Html {
 
     {
         let result = request_result.clone();
-        use_effect(move || {
+        use_effect_with((), move |_| {
             wasm_bindgen_futures::spawn_local(async move {
                 let backend_url = BACKEND_URL.to_string();
                 let backend_msg = Request::get(&backend_url).send().await.unwrap().text().await.unwrap();
@@ -18,7 +18,7 @@ pub fn home() -> Html {
                 result.set(backend_msg);
             });
 
-            || ()
+            //|| ()
         });
     }
 
