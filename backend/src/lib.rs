@@ -39,6 +39,10 @@ impl Backend {
             .connect(DATABASE_URL)
             .await?;
 
+        sqlx::migrate!()
+            .run(&pool)
+            .await?;
+
         Ok(Self {
             host,
             user,
