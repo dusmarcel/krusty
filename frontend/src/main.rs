@@ -1,7 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use frontend::{home::Home, login::Login};
+use frontend::{home::Home, login::Login, register::Register};
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
@@ -9,12 +9,15 @@ enum Route {
     Home,
     #[at("/login")]
     Login,
+    #[at("/register")]
+    Register,
 }
 
 fn switch(routes:Route) -> Html {
     match routes {
         Route::Home => html! { <Home /> },
         Route::Login => html! { <Login /> },
+        Route::Register => html! { <Register /> },
     }
 }
 

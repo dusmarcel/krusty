@@ -9,6 +9,7 @@ use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 mod actor;
 mod key;
 pub mod user;
+pub mod users;
 pub mod webfinger;
 pub mod link;
 

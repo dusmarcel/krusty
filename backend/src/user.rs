@@ -2,6 +2,14 @@ use actix_web::{error, get, web, Responder, Result};
 
 use crate::Backend;
 
+#[derive(sqlx::FromRow)]
+pub struct User {
+    id: i32,
+    name: String,
+    salt: String,
+    hash: String
+}
+
 #[get("/user/{user}")]
 async fn user(backend: web::Data<Backend>, path: web::Path<String>) -> Result<impl Responder> {
     let user = path.into_inner();
