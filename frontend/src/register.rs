@@ -2,8 +2,16 @@ include!("../backend_config.rs");
 use yew::prelude::*;
 use gloo_net::http::Request;
 
-fn user_count_result(result: String) -> String {
-    result
+fn registration_allowed(result: UseStateHandle<String>) -> bool {
+    if let Ok(r) = result.to_string().parse::<i32>() {
+        if r == 0 {
+            true
+        } else {
+            false
+        }
+    } else {
+        false
+    }
 }
 
 #[function_component(Register)]
@@ -25,7 +33,13 @@ pub fn register() -> Html {
     html! {
         <>
             <h1>{ "Register" }</h1>
-            <p>{ user_count_result(result.to_string()) }</p>
+            <p>{
+                if registration_allowed(result) {
+                    "Please register!"
+                } else {
+                    "No registrations allowed!"
+                }
+            }</p>
         </>
     }
 }
