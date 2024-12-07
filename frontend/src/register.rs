@@ -34,15 +34,23 @@ pub fn register() -> Html {
         <>
             <h1>{ "Register" }</h1>
             if registration_allowed(result) {
-                <form action="/back/register" method="post">
-                    <label>{ "Username" }
-                        <input type="text" placeholder="Enter Username" name="username" />
-                    </label>
-                    <label>{ "Passwort" }
-                        <input type="password" placeholder="Enter Password" name="password" />
-                    </label>
-                    <button type="submit">{ "Login" }</button>
-                </form> 
+                <p>
+                    <form action="/back/register" method="post">
+                        <p>
+                            <label>{ "Username" }
+                                <input type="text" placeholder="Enter Username" name="username" />
+                            </label>
+                        </p>
+                        <p>
+                            <label>{ "Passwort" }
+                                <input type="password" placeholder="Enter Password" name="password" />
+                            </label>
+                        </p>
+                        <p>
+                            <button type="submit">{ "Register" }</button>
+                        </p>
+                    </form>
+                </p>
             } else {
                 <p>{ "No registrations allowed!" }</p>
             }

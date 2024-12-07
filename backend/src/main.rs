@@ -4,7 +4,9 @@ use actix_web::{web, App, HttpServer};
 
 use backend::{
     Backend,
-    back, login,
+    back,
+    login,
+    register::register,
     user::user,
     users::users,
     webfinger::webfinger
@@ -22,6 +24,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(backend.clone()))
             .service(back)
             .service(login)
+            .service(register)
             .service(user)
             .service(users)
             .service(webfinger)
