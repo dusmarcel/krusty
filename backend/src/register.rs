@@ -21,5 +21,7 @@ async fn register(form: web::Form<FormData>) -> impl Responder {
     let hash = argon2.hash_password(form.password.as_bytes(), &salt).unwrap();
     println!("{}", hash);
 
+    println!("INSERT INTO users (id, name, salt, hash) VALUES (DEFAULT, form.username, salt, hash)");
+
     web::Redirect::to("/register").see_other()
 }
