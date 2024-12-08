@@ -11,4 +11,4 @@ openssl = "0.10.68"
 password-hash = "0.5.0"
 serde = "1.0.215"
 shared = { version = "0.1.0", path = "../shared" }
-sqlx = { version = "0.8.2", features = ["runtime-async-std", "postgres"] }
+sqlx = { version = "0.8.2", features = ["runtime-async-std", "postgres", "macros"] }

@@ -7,8 +7,9 @@ use crate::{
 
 #[get("/back/users")]
 async fn users(backend: web::Data<Backend>) -> Result<impl Responder> {
-    let users_vec = sqlx::query_as::<_ , User>("SELECT * FROM users")
-        .fetch_all(&backend.pool).await.unwrap();
+    let users_vec = sqlx::query_as!(User, "SELECT * FROM users")
+        .fetch_all(&backend.pool)
+        .await?;
 
     Ok(web::Json(users_vec.len()))
 }
