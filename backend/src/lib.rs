@@ -3,11 +3,12 @@ include!("../database_config.rs");
 use std::env;
 
 use anyhow::Result;
-use actix_web::{get, post, web::Redirect, HttpResponse, Responder};
+use actix_web::{get, HttpResponse, Responder};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 mod actor;
 mod key;
+pub mod login;
 pub mod register;
 pub mod user;
 pub mod users;
@@ -57,9 +58,4 @@ impl Backend {
 #[get("/back")]
 async fn back() -> impl Responder {
     HttpResponse::Ok().body("Hello from Krusty!")
-}
-
-#[post("/back/login")]
-async fn login() ->impl Responder {
-    Redirect::to("/").see_other()
 }

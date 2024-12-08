@@ -37,12 +37,12 @@ pub fn register() -> Html {
                 <p>
                     <form action="/back/register" method="post">
                         <p>
-                            <label>{ "Username" }
+                            <label>{ "Username:" }
                                 <input type="text" placeholder="Enter Username" name="username" />
                             </label>
                         </p>
                         <p>
-                            <label>{ "Passwort" }
+                            <label>{ "Passwort:" }
                                 <input type="password" placeholder="Enter Password" name="password" />
                             </label>
                         </p>
