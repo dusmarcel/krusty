@@ -20,7 +20,7 @@ fn main () {
 
     let db_output=format!(r#"pub const DATABASE_URL: &str = "{}";"#, postgres_url);
     fs::write("./database_config.rs", db_output).expect("Could'nt write database_config.rs");
-    let env_output=format!(r#"DATABASE_URL={}"#, postgres_url);
-    fs::write("./.env", env_output).expect("Could'nt write .env")
+    // let env_output=format!(r#"DATABASE_URL={}"#, postgres_url);
+    // fs::write("./.env", env_output).expect("Could'nt write .env")
 }
 
