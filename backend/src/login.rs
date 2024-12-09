@@ -21,12 +21,20 @@ async fn login(backend: web::Data<Backend>, form: web::Form<FormData>) ->impl Re
 
     match stream.next().await {
         Some(res) => {
-            println!("Found user: {:?}", res);
-            web::Redirect::to("/").see_other()
-        }
+            match res {
+                Ok(res) => {
+                    println!("Found user: {:?}", res);
+                    web::Redirect::to("/").see_other()
+                },
+                Err(e) => {
+                    eprintln!("Login failed: {}", e);
+                    web::Redirect::to("/login").see_other()
+                }
+            }
+        }                  
         None => {
             eprintln!("Login failed!");
-            web::Redirect::to("/").see_other()
+            web::Redirect::to("/login").see_other()
         }   
     }
 }
