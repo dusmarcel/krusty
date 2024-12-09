@@ -2,7 +2,7 @@ use actix_web::{error, get, web, Responder, Result};
 
 use crate::Backend;
 
-#[derive(sqlx::FromRow)]
+#[derive(Debug, sqlx::FromRow)]
 pub struct User {
     id: i32,
     name: String,
