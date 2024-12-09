@@ -6,7 +6,7 @@ pub fn login() -> Html {
         <>
             <h1>{ "Login" }</h1>
             <p>
-                <form action="/back/register" method="post">
+                <form action="/back/login" method="post">
                     <p>
                         <label>{ "Username:" }
                             <input type="text" placeholder="Enter Username" name="username" />
