@@ -23,6 +23,7 @@ pub struct Backend {
     pub user: Option<String>,
     pub actor: Actor,
     pub pool: Pool<Postgres>,
+    pub registration_allowed: bool,
 }
 
 impl Backend {
@@ -46,11 +47,15 @@ impl Backend {
             .run(&pool)
             .await?;
 
+        let registration_allowed = false;
+
+
         Ok(Self {
             host,
             user,
             actor,
             pool,
+            registration_allowed
         })
     }
 }

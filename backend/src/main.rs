@@ -6,7 +6,7 @@ use backend::{
     Backend,
     back,
     login::login,
-    register::register,
+    register::{register, registration_allowed},
     user::user,
     users::users,
     webfinger::webfinger
@@ -25,6 +25,7 @@ async fn main() -> std::io::Result<()> {
             .service(back)
             .service(login)
             .service(register)
+            .service(registration_allowed)
             .service(user)
             .service(users)
             .service(webfinger)
