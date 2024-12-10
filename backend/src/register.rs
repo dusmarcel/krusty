@@ -26,6 +26,8 @@ async fn register(backend: web::Data<Backend>, form: web::Form<FormData>) -> Res
             .execute(&backend.pool)
             .await;
 
+        // TBD: set registration allowed to false!
+
         match result {
             Ok(_) => Ok(web::Redirect::to("/login").see_other()),
             Err(e) => {

@@ -47,7 +47,17 @@ impl Backend {
             .run(&pool)
             .await?;
 
-        let registration_allowed = false;
+        let registration_allowed;
+        // The default behaviour is, that only one regstration shall be allowed
+        // i. e., if no user exists yet
+        let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")
+            .fetch_one(&pool)
+            .await?;
+        if count == 0 {
+            registration_allowed = true;
+        } else {
+            registration_allowed = false;
+        }
 
 
         Ok(Self {
