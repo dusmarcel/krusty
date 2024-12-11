@@ -1,6 +1,6 @@
 include!("../database_config.rs");
 
-use std::{env, sync::Mutex};
+use std::env;
 
 use anyhow::Result;
 use actix_web::{get, HttpResponse, Responder};
@@ -39,7 +39,7 @@ impl Backend {
             .run(&pool)
             .await?;
 
-        let mut registration_allowed = false; // = Mutex::new(false);
+        let registration_allowed; // = Mutex::new(false);
         // The default behaviour is, that only one regstration shall be allowed
         // i. e., if no user exists yet
         let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")
