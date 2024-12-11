@@ -1,3 +1,5 @@
+use std::sync::Mutex;
+
 use serde::{Serialize, Deserialize};
 use actix_web::{error, get, web, Responder, Result};
 
@@ -30,9 +32,10 @@ pub struct Resource {
 }
 
 #[get("/.well-known/webfinger")]
-async fn webfinger(backend: web::Data<Backend>, query: web::Query<Resource>) -> Result<impl Responder> {
+async fn webfinger(backend: web::Data<Mutex<Backend>>, query: web::Query<Resource>) -> Result<impl Responder> {
+    let my_backend = backend.lock().unwrap();
     let resource = query.into_inner().resource;
-    if let Some(host) =  &backend.host {
+    if let Some(host) =  &my_backend.host {
         let resource_parts: Vec<&str> = resource.split(':').collect();
         if resource_parts.len() == 2 {
             if let Some(first_part) = resource_parts.get(0) {
@@ -45,7 +48,7 @@ async fn webfinger(backend: web::Data<Backend>, query: web::Query<Resource>) -> 
                                         "SELECT * FROM users WHERE name = $1"
                                     )
                                     .bind(*first_part)
-                                    .fetch_optional(&backend.pool)
+                                    .fetch_optional(&my_backend.pool)
                                     .await;
 
                                 match result {

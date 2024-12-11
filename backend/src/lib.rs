@@ -19,7 +19,6 @@ pub mod link;
 pub struct Backend {
     pub host: Option<String>,
     pub pool: Pool<Postgres>,
-    //pub registration_allowed: Mutex<bool>,
     pub registration_allowed: bool
 }
 
@@ -45,14 +44,12 @@ impl Backend {
         let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")
             .fetch_one(&pool)
             .await?;
-        //{
-            //let mut reg_all = registration_allowed.lock().unwrap();
-            if count == 0 {
-                registration_allowed = true;
-            } else {
-                registration_allowed = false;
-            }
-        //}
+
+        if count == 0 {
+            registration_allowed = true;
+        } else {
+            registration_allowed = false;
+        }
 
         Ok(Self {
             host,

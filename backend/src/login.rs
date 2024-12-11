@@ -1,3 +1,5 @@
+use std::sync::Mutex;
+
 use actix_web::{post, web, Responder};
 use serde::Deserialize;
 
@@ -10,12 +12,13 @@ struct FormData {
 }
 
 #[post("/back/login")]
-async fn login(backend: web::Data<Backend>, form: web::Form<FormData>) -> impl Responder {
+async fn login(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>) -> impl Responder {
+    let my_backend = backend.lock().unwrap();
     let result = sqlx::query_as::<_, User>(
             "SELECT * FROM users WHERE name = $1"
         )
         .bind(&form.username)
-        .fetch_optional(&backend.pool)
+        .fetch_optional(&my_backend.pool)
         .await;
 
     match result {

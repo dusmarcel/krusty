@@ -36,7 +36,6 @@ async fn register(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>)
                     .await
                     .map_err(actix_web::error::ErrorInternalServerError)?;
                 if count == 1 {
-                    //reg_all = false;
                     my_backend.registration_allowed = false;
                 }
                 Ok(web::Redirect::to("/login").see_other())
@@ -52,7 +51,7 @@ async fn register(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>)
 }
 
 #[get("/back/registration_allowed")]
-async fn registration_allowed(backend: web::Data<Backend>) -> impl Responder {
-    let reg_all = backend.registration_allowed;//.lock().unwrap();
-    web::Json(reg_all)
+async fn registration_allowed(backend: web::Data<Mutex<Backend>>) -> impl Responder {
+    let my_backend = backend.lock().unwrap();
+    web::Json(my_backend.registration_allowed)
 }
