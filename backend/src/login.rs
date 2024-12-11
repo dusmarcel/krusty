@@ -1,5 +1,3 @@
-use async_std::stream::StreamExt;
-
 use actix_web::{post, web, Responder};
 use serde::Deserialize;
 
@@ -12,28 +10,29 @@ struct FormData {
 }
 
 #[post("/back/login")]
-async fn login(backend: web::Data<Backend>, form: web::Form<FormData>) ->impl Responder {
-    let mut stream = sqlx::query_as::<_, User>(
+async fn login(backend: web::Data<Backend>, form: web::Form<FormData>) -> impl Responder {
+    let result = sqlx::query_as::<_, User>(
             "SELECT * FROM users WHERE name = $1"
         )
         .bind(&form.username)
-        .fetch(&backend.pool);
+        .fetch_optional(&backend.pool)
+        .await;
 
-    match stream.next().await {
-        Some(res) => {
+    match result {
+        Ok(res) => {
             match res {
-                Ok(res) => {
+                Some(res) => {
                     println!("Found user: {:?}", res);
                     web::Redirect::to("/").see_other()
                 },
-                Err(e) => {
-                    eprintln!("Login failed: {}", e);
+                None => {
+                    eprintln!("Login failed! User not foun.");
                     web::Redirect::to("/login").see_other()
                 }
             }
         }                  
-        None => {
-            eprintln!("Login failed!");
+        Err(e) => {
+            eprintln!("Login failed: {}", e);
             web::Redirect::to("/login").see_other()
         }   
     }

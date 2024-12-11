@@ -1,5 +1,7 @@
 include!("../backend_config.rs");
 
+use std::sync::Mutex;
+
 use actix_web::{web, App, HttpServer};
 
 use backend::{
@@ -19,9 +21,11 @@ async fn main() -> std::io::Result<()> {
         std::io::Error::new(std::io::ErrorKind::Other, format!("backend error: {}", e))        
     })?;
 
+    let data = web::Data::new(Mutex::new(backend));
+
     HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(backend.clone()))
+            .app_data(web::Data::clone(&data))
             .service(back)
             .service(login)
             .service(register)

@@ -1,8 +1,11 @@
 use serde::{Serialize, Deserialize};
 use actix_web::{error, get, web, Responder, Result};
 
-use crate::Backend;
-use crate::link::Link;
+use crate::{
+    Backend,
+    user::User,
+    link::Link
+};
 
 #[derive(Serialize)]
 pub struct Webfinger {
@@ -30,30 +33,41 @@ pub struct Resource {
 async fn webfinger(backend: web::Data<Backend>, query: web::Query<Resource>) -> Result<impl Responder> {
     let resource = query.into_inner().resource;
     if let Some(host) =  &backend.host {
-        if let Some(b_user) = &backend.user {
-            let resource_parts: Vec<&str> = resource.split(':').collect();
-            if resource_parts.len() == 2 {
-                if let Some(first_part) = resource_parts.get(0) {
-                    if *first_part == "acct" {
-                        if let Some(second_part) = resource_parts.get(1) {
-                            let acct_parts: Vec<&str> = second_part.split('@').collect();
-                            if acct_parts.len() == 2 {
-                                if let Some(first_part) = acct_parts.get(0) {
-                                    if *first_part == b_user {
-                                        if let Some(second_part) = acct_parts.get(1) {
-                                            if *second_part == host {
-                                                Ok(web::Json(crate::webfinger::Webfinger::new(host, b_user)))
+        let resource_parts: Vec<&str> = resource.split(':').collect();
+        if resource_parts.len() == 2 {
+            if let Some(first_part) = resource_parts.get(0) {
+                if *first_part == "acct" {
+                    if let Some(second_part) = resource_parts.get(1) {
+                        let acct_parts: Vec<&str> = second_part.split('@').collect();
+                        if acct_parts.len() == 2 {
+                            if let Some(first_part) = acct_parts.get(0) {
+                                let result = sqlx::query_as::<_, User>(
+                                        "SELECT * FROM users WHERE name = $1"
+                                    )
+                                    .bind(*first_part)
+                                    .fetch_optional(&backend.pool)
+                                    .await;
+
+                                match result {
+                                    Ok(res) => {
+                                        if let Some(user) = res { 
+                                            if let Some(second_part) = acct_parts.get(1) {
+                                                if *second_part == host {
+                                                    Ok(web::Json(crate::webfinger::Webfinger::new(host, &user.name)))
+                                                } else {
+                                                    Err(error::ErrorNotFound("Not found!"))
+                                                }
                                             } else {
                                                 Err(error::ErrorNotFound("Not found!"))
                                             }
                                         } else {
                                             Err(error::ErrorNotFound("Not found!"))
-                                        }
-                                    } else {
-                                        Err(error::ErrorNotFound("Not found!"))
+                                        } 
                                     }
-                                } else {
-                                    Err(error::ErrorNotFound("Not found!"))
+                                    Err(e) => {
+                                        eprintln!("Error: {}", e);
+                                        Err(error::ErrorInternalServerError("Internal server error!"))
+                                    }
                                 }
                             } else {
                                 Err(error::ErrorNotFound("Not found!"))
@@ -62,7 +76,7 @@ async fn webfinger(backend: web::Data<Backend>, query: web::Query<Resource>) -> 
                             Err(error::ErrorNotFound("Not found!"))
                         }
                     } else {
-                        Err(error::ErrorInternalServerError("Internal server error!"))
+                        Err(error::ErrorNotFound("Not found!"))
                     }
                 } else {
                     Err(error::ErrorInternalServerError("Internal server error!"))
