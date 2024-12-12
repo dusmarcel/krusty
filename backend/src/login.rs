@@ -29,7 +29,7 @@ async fn login(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>) ->
                     web::Redirect::to("/").see_other()
                 },
                 None => {
-                    eprintln!("Login failed! User not foun.");
+                    eprintln!("Login failed! User not found.");
                     web::Redirect::to("/login").see_other()
                 }
             }
