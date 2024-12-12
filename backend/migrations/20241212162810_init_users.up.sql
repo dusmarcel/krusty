@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT UNIQUE NOT NULL,
     salt TEXT NOT NULL,
     hash TEXT NOT NULL,
-)
+);
