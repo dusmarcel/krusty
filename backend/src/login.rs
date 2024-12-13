@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use actix_web::{post, web, Responder};
+use actix_web::{http::StatusCode, post, web, Responder};
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use serde::Deserialize;
 
@@ -35,27 +35,27 @@ async fn login(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>) ->
                                     web::Redirect::to("/").see_other()
                                 }
                                 Err(e) => {
-                                    eprintln!("Could'nt verify password: {}", e);
-                                    web::Redirect::to("/login").see_other()
+                                    eprintln!("Login failed: {}", e);
+                                    web::Redirect::to("/login").using_status_code(StatusCode::FORBIDDEN)
                                 }
                             }
                             
                         }
                         Err(e) => {
                             eprintln!("Could'nt retrieve password hash form database: {}", e);
-                            web::Redirect::to("/login").see_other()
+                            web::Redirect::to("/login").using_status_code(StatusCode::INTERNAL_SERVER_ERROR)
                         }
                     }
                 },
                 None => {
                     eprintln!("Login failed! User not found.");
-                    web::Redirect::to("/login").see_other()
+                    web::Redirect::to("/login").using_status_code(StatusCode::FORBIDDEN)
                 }
             }
         }                  
         Err(e) => {
             eprintln!("Login failed: {}", e);
-            web::Redirect::to("/login").see_other()
+            web::Redirect::to("/login").using_status_code(StatusCode::INTERNAL_SERVER_ERROR)
         }   
     }
 }
