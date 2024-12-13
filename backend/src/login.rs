@@ -1,6 +1,7 @@
 use std::sync::Mutex;
 
 use actix_web::{post, web, Responder};
+use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use serde::Deserialize;
 
 use crate::{Backend, user::User};
@@ -24,9 +25,27 @@ async fn login(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>) ->
     match result {
         Ok(res) => {
             match res {
-                Some(res) => {
-                    println!("Found user: {:?}", res);
-                    web::Redirect::to("/").see_other()
+                Some(user) => {
+                    println!("Found user: {}", user.name);
+                    match PasswordHash::new(&user.hash) {
+                        Ok(hash) => {
+                            match Argon2::default().verify_password(form.password.as_bytes(), &hash) {
+                                Ok(_) => {
+                                    println!("Login succesful!");
+                                    web::Redirect::to("/").see_other()
+                                }
+                                Err(e) => {
+                                    eprintln!("Could'nt verify password: {}", e);
+                                    web::Redirect::to("/login").see_other()
+                                }
+                            }
+                            
+                        }
+                        Err(e) => {
+                            eprintln!("Could'nt retrieve password hash form database: {}", e);
+                            web::Redirect::to("/login").see_other()
+                        }
+                    }
                 },
                 None => {
                     eprintln!("Login failed! User not found.");
