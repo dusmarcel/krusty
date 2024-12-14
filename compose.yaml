@@ -41,7 +41,7 @@ services:
     depends_on:
       - db:
         condition: service_healthy
-      - valkey:
+      - valkey
   frontend:
     container_name: frontend
     build:
@@ -62,4 +62,3 @@ services:
 volumes:
   pgdata:
   valkeydata:
-  
