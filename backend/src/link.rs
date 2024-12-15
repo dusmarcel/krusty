@@ -12,7 +12,7 @@ impl Link {
     pub fn new(host: &String, user: &String) -> Self {
         Self {
             rel: "self".to_string(),
-            link_type: "application/activity+json.to".to_string(),
+            link_type: "application/activity+json".to_string(),
             href: format!("https://{}/user/{}", host, user),
         }
     }
