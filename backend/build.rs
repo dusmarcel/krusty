@@ -31,7 +31,7 @@ fn main () {
 
     let valkey_host=env::var("VALKEY_HOST").unwrap_or_else(|_| "valkey".to_string());
     let valkey_port=env::var("VALKEY_PORT").unwrap_or_else(|_| "6379".to_string());
-    let valkey_url=format!("redis://{}:{}",
+    let valkey_url=format!("rediss://{}:{}",
         valkey_host,
         valkey_port
     );
