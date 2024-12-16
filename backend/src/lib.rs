@@ -1,4 +1,4 @@
-include!("../database_config.rs");
+include!("../postgres_config.rs");
 
 use std::env;
 
@@ -31,14 +31,14 @@ impl Backend {
  
         let pool = PgPoolOptions::new()
             .max_connections(8)
-            .connect(DATABASE_URL)
+            .connect(POSTGRES_URL)
             .await?;
 
         sqlx::migrate!()
             .run(&pool)
             .await?;
 
-        let registration_allowed; // = Mutex::new(false);
+        let registration_allowed;
         // The default behaviour is, that only one regstration shall be allowed
         // i. e., if no user exists yet
         let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")

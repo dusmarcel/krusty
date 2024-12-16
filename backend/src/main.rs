@@ -1,8 +1,10 @@
+include!("../valkey_config.rs");
 include!("../backend_config.rs");
 
 use std::sync::Mutex;
 
-use actix_web::{web, App, HttpServer};
+use actix_web::{cookie::Key, web, App, HttpServer};
+use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 
 use backend::{
     Backend,
@@ -23,9 +25,20 @@ async fn main() -> std::io::Result<()> {
 
     let data = web::Data::new(Mutex::new(backend));
 
+    let secret_key = Key::generate();
+    let redis_store = RedisSessionStore::new(VALKEY_URL)
+        .await
+        .unwrap();
+
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::clone(&data))
+            .wrap(
+                SessionMiddleware::new(
+                    redis_store.clone(),
+                    secret_key.clone()
+                )
+            )
             .service(back)
             .service(login)
             .service(register)
