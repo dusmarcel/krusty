@@ -15,7 +15,7 @@ services:
     container_name: valkey
     image: valkey/valkey:alpine
     env_file: .env
-    command: valkey-server --save 60 1 --loglevel warning
+    command: valkey-server --save 60 1 --loglevel warning --requirepass $VALKEY_PASSWORD
     volumes:
       - valkeydata:/data
   backend:
