@@ -21,7 +21,7 @@ fn main () {
     fs::write("./postgres_config.rs", postgres_output).expect("Could'nt write postgres_config.rs");
 
     let valkey_host=env::var("VALKEY_HOST").unwrap_or_else(|_| "valkey".to_string());
-    let valkey_port=env::var("VALKEY_PORT").unwrap_or_else(|_| "valkey".to_string());
+    let valkey_port=env::var("VALKEY_PORT").unwrap_or_else(|_| "6379".to_string());
     let valkey_password=env::var("VALKEY_PASSWORD").unwrap_or_else(|_| "valkey".to_string());
     let valkey_url=format!("redis://{}:{}?auth={}",
         valkey_host,
