@@ -26,6 +26,7 @@ async fn main() -> std::io::Result<()> {
     let data = web::Data::new(Mutex::new(backend));
 
     let secret_key = Key::generate();
+    eprintln!("{}", VALKEY_URL);
     let redis_store = RedisSessionStore::new(VALKEY_URL)
         .await
         .unwrap();
