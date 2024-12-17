@@ -25,8 +25,8 @@ async fn register(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>)
         let result = sqlx::query(
                 "INSERT INTO users (uuid, name, salt, hash) VALUES ($1, $2, $3, $4)"
             )
-            .bind(&form.username)
             .bind(&uuid.to_string())
+            .bind(&form.username)
             .bind(&salt.to_string())
             .bind(&hash.to_string())
             .execute(&my_backend.pool)
