@@ -6,7 +6,7 @@ use crate::{Backend, actor::Actor};
 
 #[derive(Debug, sqlx::FromRow)]
 pub struct User {
-    pub id: i32,
+    pub uuid: String,
     pub name: String,
     pub salt: String,
     pub hash: String
