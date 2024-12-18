@@ -29,12 +29,12 @@ async fn main() -> std::io::Result<()> {
 
     println!("VALKEY_URL={}", VALKEY_URL);
     // let secret_key = Key::generate();
-    // let redis_store = RedisSessionStore::new(VALKEY_URL)
-    //     .await
-    //     .map_err(|e| {
-    //         eprintln!("Could'nt create valkey/redis store! Error message: {}", e);
-    //         std::io::Error::new(std::io::ErrorKind::Other, format!("valkey/redis rror: {}", e))
-    //     })?;
+    let _redis_store = RedisSessionStore::new(VALKEY_URL)
+        .await
+        .map_err(|e| {
+            eprintln!("Could'nt create valkey/redis store! Error message: {}", e);
+            std::io::Error::new(std::io::ErrorKind::Other, format!("valkey/redis rror: {}", e))
+        })?;
 
     HttpServer::new(move || {
         App::new()
