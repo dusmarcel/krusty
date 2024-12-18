@@ -28,8 +28,8 @@ async fn main() -> std::io::Result<()> {
     let data = web::Data::new(Mutex::new(backend));
 
     println!("VALKEY_URL={}", VALKEY_URL);
-    // let secret_key = Key::generate();
-    let _redis_store = RedisSessionStore::new(VALKEY_URL)
+     let secret_key = Key::generate();
+    let redis_store = RedisSessionStore::new(VALKEY_URL)
         .await
         .map_err(|e| {
             eprintln!("Could'nt create valkey/redis store! Error message: {}", e);
@@ -39,12 +39,12 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::clone(&data))
-            // .wrap(
-            //     SessionMiddleware::new(
-            //         redis_store.clone(),
-            //         secret_key.clone()
-            //     )
-            // )
+            .wrap(
+                SessionMiddleware::new(
+                    redis_store.clone(),
+                    secret_key.clone()
+                )
+            )
             .service(back)
             .service(login)
             .service(register)
