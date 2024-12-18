@@ -38,12 +38,12 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::clone(&data))
-            .wrap(
-                SessionMiddleware::new(
-                    redis_store.clone(),
-                    secret_key.clone()
-                )
-            )
+            // .wrap(
+            //     SessionMiddleware::new(
+            //         redis_store.clone(),
+            //         secret_key.clone()
+            //     )
+            // )
             .service(back)
             .service(login)
             .service(register)
