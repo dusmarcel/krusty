@@ -19,14 +19,14 @@ async fn register(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>)
     let mut my_backend = backend.lock().unwrap();
     if my_backend.registration_allowed {
         let uuid = Uuid::now_v7();
-        println!("uuid={}", uuid.to_string());
+        println!("uuid={}", uuid.simple().to_string());
         let salt = SaltString::generate(&mut OsRng);
         let argon2 = Argon2::default();
         let hash = argon2.hash_password(form.password.as_bytes(), &salt).unwrap();
         let result = sqlx::query(
                 "INSERT INTO users (uuid, name, salt, hash) VALUES ($1, $2, $3, $4)"
             )
-            .bind(&uuid.to_string())
+            .bind(&uuid.simple().to_string())
             .bind(&form.username)
             .bind(&salt.to_string())
             .bind(&hash.to_string())
