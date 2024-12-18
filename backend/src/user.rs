@@ -1,12 +1,13 @@
 use std::sync::Mutex;
 
 use actix_web::{error, get, web, Responder, Result};
+use uuid::Uuid;
 
 use crate::{Backend, actor::Actor};
 
 #[derive(Debug, sqlx::FromRow)]
 pub struct User {
-    pub uuid: String,
+    pub id: Uuid,
     pub name: String,
     pub salt: String,
     pub hash: String
