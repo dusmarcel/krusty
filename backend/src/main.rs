@@ -33,7 +33,7 @@ async fn main() -> std::io::Result<()> {
         .await
         .map_err(|e| {
             eprintln!("Could'nt create valkey/redis store! Error message: {}", e);
-            std::io::Error::new(std::io::ErrorKind::Other, format!("valkey/redis rror: {}", e))
+            std::io::Error::new(std::io::ErrorKind::Other, format!("valkey/redis error: {}", e))
         })?;
 
     HttpServer::new(move || {
