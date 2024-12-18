@@ -27,7 +27,7 @@ async fn main() -> std::io::Result<()> {
 
     let data = web::Data::new(Mutex::new(backend));
 
-    let secret_key = Key::generate();
+    // let secret_key = Key::generate();
     let redis_store = RedisSessionStore::new(VALKEY_URL)
         .await
         .map_err(|e| {
