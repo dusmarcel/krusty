@@ -1,5 +1,6 @@
 include!("../valkey_config.rs");
 include!("../backend_config.rs");
+include!("../secret_key.rs");
 
 use std::sync::Mutex;
 
@@ -27,8 +28,7 @@ async fn main() -> std::io::Result<()> {
 
     let data = web::Data::new(Mutex::new(backend));
 
-    println!("VALKEY_URL={}", VALKEY_URL);
-     let secret_key = Key::generate();
+    let secret_key = Key::from(SECRET_KEY.as_bytes());
     let redis_store = RedisSessionStore::new(VALKEY_URL)
         .await
         .map_err(|e| {

@@ -30,6 +30,11 @@ fn main () {
     );
 
     let valkey_output=format!(r#"pub const VALKEY_URL: &str = "{}";"#, valkey_url);
-    fs::write("./valkey_config.rs", valkey_output).expect("Could'nt write valkey_config.rs");    
+    fs::write("./valkey_config.rs", valkey_output).expect("Could'nt write valkey_config.rs");
+
+    let secret_key=env::var("SECRET_KEY").unwrap_or_else(|_| "".to_string());
+
+    let key_output=format!(r#"pub const SECRET_KEY: &str = "{}";"#, secret_key); 
+    fs::write("./secret_key.rs", key_output).expect("Could'nt write secret_key.rs");
 }
 

@@ -26,3 +26,4 @@ frontend/dist
 backend/postgres_config.rs
 backend/valkey_config.rs
 backend/backend_config.rs
+backend/secret_key.rs

@@ -26,6 +26,7 @@ services:
         VALKEY_HOST: $VALKEY_HOST
         VALKEY_PORT: $VALKEY_PORT
         VALKEY_PASSWORD: $VALKEY_PASSWORD
+        SECRET_KEY: $SECRET_KEY
         BACKEND_IF: $BACKEND_IF
       target: final
     develop:
