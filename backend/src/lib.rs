@@ -1,9 +1,10 @@
 include!("../postgres_config.rs");
 
-use std::env;
+use std::{env, sync::Mutex};
 
 use anyhow::Result;
-use actix_web::{get, HttpResponse, Responder};
+use actix_session::Session;
+use actix_web::{get, HttpResponse, Responder, web};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 mod actor;
@@ -14,6 +15,8 @@ pub mod user;
 pub mod users;
 pub mod webfinger;
 pub mod link;
+
+use user::User;
 
 #[derive(Clone)]
 pub struct Backend {
@@ -60,6 +63,24 @@ impl Backend {
 }
 
 #[get("/back")]
-async fn back() -> impl Responder {
+async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
+    let my_backend = backend.lock().unwrap();
+    if let Ok(id) =  session.get::<String>("id") {
+        let result = sqlx::query_as::<_, User>(
+            "SELECT * FROM users WHERE id = $1"
+        )
+        .bind(&id)
+        .fetch_optional(&my_backend.pool)
+        .await;
+
+        match result {
+            Ok(res) => {
+                HttpResponse::Ok().body(format!("Hello, {}!", res.unwrap().name));
+            }
+            Err(_) => {
+                HttpResponse::Ok().body("Hello from Krusty!");
+            }
+        }
+    }
     HttpResponse::Ok().body("Hello from Krusty!")
 }
