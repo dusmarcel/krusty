@@ -66,6 +66,7 @@ impl Backend {
 async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
+        println!("Session id: {:?}", id);
         let result = sqlx::query_as::<_, User>(
             "SELECT * FROM users WHERE id = $1"
         )
@@ -77,7 +78,8 @@ async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Resp
             Ok(res) => {
                 HttpResponse::Ok().body(format!("Hello, {}!", res.unwrap().name));
             }
-            Err(_) => {
+            Err(e) => {
+                eprintln!("Error while executing query: {}", e);
                 HttpResponse::Ok().body("Hello from Krusty!");
             }
         }
