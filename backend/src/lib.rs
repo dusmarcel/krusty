@@ -17,6 +17,7 @@ pub mod webfinger;
 pub mod link;
 
 use user::User;
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct Backend {
@@ -66,11 +67,12 @@ impl Backend {
 async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
-        println!("Session id: {:?}", id);
+        let uuid = Uuid::parse_str(&id.unwrap()).unwrap();
+        println!("Session id: {:?}", uuid.to_string());
         let result = sqlx::query_as::<_, User>(
             "SELECT * FROM users WHERE id = $1"
         )
-        .bind(&id)
+        .bind(&uuid)
         .fetch_optional(&my_backend.pool)
         .await;
 

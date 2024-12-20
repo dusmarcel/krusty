@@ -27,7 +27,6 @@ async fn login(backend: web::Data<Mutex<Backend>>, session: Session, form: web::
         Ok(res) => {
             match res {
                 Some(user) => {
-                    println!("Found user: {:#?}", user);
                     match PasswordHash::new(&user.hash) {
                         Ok(hash) => {
                             match Argon2::default().verify_password(form.password.as_bytes(), &hash) {
