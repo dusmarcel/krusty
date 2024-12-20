@@ -67,24 +67,33 @@ impl Backend {
 async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
-        let uuid = Uuid::parse_str(&id.unwrap()).unwrap();
-        println!("Session id: {:?}", uuid.to_string());
-        let result = sqlx::query_as::<_, User>(
-            "SELECT * FROM users WHERE id = $1"
-        )
-        .bind(&uuid)
-        .fetch_optional(&my_backend.pool)
-        .await;
+        if let Some(id) = id {
+            if let Ok(id) = Uuid::parse_str(&id) {
+                println!("Session id: {:?}", id.to_string());
+                let result = sqlx::query_as::<_, User>(
+                    "SELECT * FROM users WHERE id = $1"
+                )
+                .bind(&id)
+                .fetch_optional(&my_backend.pool)
+                .await;
 
-        match result {
-            Ok(res) => {
-                HttpResponse::Ok().body(format!("Hello, {}!", res.unwrap().name));
+                match result {
+                    Ok(res) => {
+                        HttpResponse::Ok().body(format!("Hello, {}!", res.unwrap().name))
+                    }
+                    Err(e) => {
+                        eprintln!("Error while executing query: {}", e);
+                        HttpResponse::Ok().body("Hello from Krusty!")
+                    }
+                }
+            } else {
+                HttpResponse::Ok().body("Hello from Krusty!")
             }
-            Err(e) => {
-                eprintln!("Error while executing query: {}", e);
-                HttpResponse::Ok().body("Hello from Krusty!");
-            }
+        } else {
+            HttpResponse::Ok().body("Hello from Krusty!")
         }
+    } else {
+        
+        HttpResponse::Ok().body("Hello from Krusty!")
     }
-    HttpResponse::Ok().body("Hello from Krusty!")
 }
