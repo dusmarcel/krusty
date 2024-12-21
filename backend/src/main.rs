@@ -5,7 +5,7 @@ include!("../secret_key.rs");
 use std::sync::Mutex;
 
 use actix_web::{cookie::Key, web, App, HttpServer};
-use actix_session::{SessionMiddleware, storage::RedisSessionStore};
+use actix_session::{config::PersistentSession, storage::RedisSessionStore, SessionMiddleware};
 
 use backend::{
     Backend,
@@ -40,10 +40,16 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::clone(&data))
             .wrap(
-                SessionMiddleware::new(
-                    redis_store.clone(),
-                    secret_key.clone()
-                )
+                //SessionMiddleware::new(
+                //    redis_store.clone(),
+                //    secret_key.clone()
+                //)
+                SessionMiddleware::builder(redis_store.clone(), secret_key.clone())
+                    .session_lifecycle(
+                        PersistentSession::default()
+                            .session_ttl(actix_web::cookie::time::Duration::weeks(2))   
+                    )
+                    .build()
             )
             .service(back)
             .service(login)
