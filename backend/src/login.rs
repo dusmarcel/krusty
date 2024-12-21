@@ -36,19 +36,16 @@ async fn login(backend: web::Data<Mutex<Backend>>, session: Session, form: web::
                                         Ok(_) => {
                                             println!("Login succesful!");
                                             web::Redirect::to("/").see_other()
-                                            // HttpResponse::SeeOther().insert_header((header::LOCATION, "/")).finish()
                                         }
                                         Err(e) => {
                                             eprintln!("Login failed: {}", e);
                                             web::Redirect::to("/login").using_status_code(StatusCode::INTERNAL_SERVER_ERROR)
-                                            // HttpResponse::Found().insert_header((header::LOCATION, "/login")).finish()
                                         }
                                     }
                                 }
                                 Err(e) => {
                                     eprintln!("Login failed: {}", e);
                                     web::Redirect::to("/login").using_status_code(StatusCode::FORBIDDEN)
-                                    // HttpResponse::Found().insert_header((header::LOCATION, "/login")).finish()
                                 }
                             }
                             
@@ -56,21 +53,18 @@ async fn login(backend: web::Data<Mutex<Backend>>, session: Session, form: web::
                         Err(e) => {
                             eprintln!("Could'nt retrieve password hash form database: {}", e);
                             web::Redirect::to("/login").using_status_code(StatusCode::INTERNAL_SERVER_ERROR)
-                            // HttpResponse::Found().insert_header((header::LOCATION, "/login")).finish()
                         }
                     }
                 },
                 None => {
                     eprintln!("Login failed! User not found.");
                     web::Redirect::to("/login").using_status_code(StatusCode::FORBIDDEN)
-                    // HttpResponse::Found().insert_header((header::LOCATION, "/login")).finish()
                 }
             }
         }                  
         Err(e) => {
             eprintln!("Login failed: {}", e);
             web::Redirect::to("/login").using_status_code(StatusCode::INTERNAL_SERVER_ERROR)
-            // HttpResponse::Found().insert_header((header::LOCATION, "/login")).finish()
         }   
     }
 }

@@ -40,10 +40,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::clone(&data))
             .wrap(
-                //SessionMiddleware::new(
-                //    redis_store.clone(),
-                //    secret_key.clone()
-                //)
                 SessionMiddleware::builder(redis_store.clone(), secret_key.clone())
                     .session_lifecycle(
                         PersistentSession::default()
