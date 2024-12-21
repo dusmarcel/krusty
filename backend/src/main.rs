@@ -41,6 +41,8 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::clone(&data))
             .wrap(
                 SessionMiddleware::builder(redis_store.clone(), secret_key.clone())
+                    .cookie_secure(false) // REMOVEME!!! Only for testing purposes
+                    .cookie_path("/".to_string())
                     .session_lifecycle(
                         PersistentSession::default()
                             .session_ttl(actix_web::cookie::time::Duration::weeks(2))   
