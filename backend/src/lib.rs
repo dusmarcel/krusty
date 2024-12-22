@@ -10,6 +10,7 @@ use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 mod actor;
 mod key;
 pub mod login;
+pub mod logout;
 pub mod register;
 pub mod user;
 pub mod users;

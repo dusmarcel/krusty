@@ -11,6 +11,7 @@ use backend::{
     Backend,
     back,
     login::login,
+    logout::logout,
     register::{register, registration_allowed},
     user::user,
     users::users,
@@ -57,6 +58,7 @@ async fn main() -> std::io::Result<()> {
             // })
             .service(back)
             .service(login)
+            .service(logout)
             .service(register)
             .service(registration_allowed)
             .service(user)
