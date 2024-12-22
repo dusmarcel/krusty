@@ -38,12 +38,14 @@ async fn main() -> std::io::Result<()> {
         })?;
 
     HttpServer::new(move || {
-        let cors = Cors::default()
-            .allow_any_origin()
-            .allow_any_method()
-            .allow_any_header()
-            .supports_credentials()
-            .max_age(3600);
+        // let cors = Cors::default()
+        //     .allow_any_origin()
+        //     .allow_any_method()
+        //     .allow_any_header()
+        //     .supports_credentials()
+        //     .max_age(3600);
+
+        let cors = Cors::permissive(); // DELETE ME!!! Only for testing purposes
 
         App::new()
             .app_data(web::Data::clone(&data))
