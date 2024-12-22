@@ -3,9 +3,8 @@ include!("../backend_config.rs");
 include!("../secret_key.rs");
 
 use std::sync::Mutex;
-use futures_util::future::FutureExt;
-use actix_web::{dev::Service, cookie::Key, web, App, HttpServer};
-// use actix_cors::Cors;
+//use futures_util::future::FutureExt;
+use actix_web::{cookie::Key, web, App, HttpServer};
 use actix_session::{config::PersistentSession, storage::RedisSessionStore, SessionMiddleware};
 
 use backend::{
@@ -38,15 +37,6 @@ async fn main() -> std::io::Result<()> {
         })?;
 
     HttpServer::new(move || {
-        // let cors = Cors::default()
-        //     .allow_any_origin()
-        //     .allow_any_method()
-        //     .allow_any_header()
-        //     .supports_credentials()
-        //     .max_age(3600);
-
-        // let cors = Cors::permissive(); // DELETE ME!!! Only for testing purposes
-
         App::new()
             .app_data(web::Data::clone(&data))
             .wrap(
@@ -58,14 +48,13 @@ async fn main() -> std::io::Result<()> {
                     )
                     .build()
             )
-            // .wrap(cors)
-            .wrap_fn(|req, srv| {
-                println!("Request: {:?}", req);
-                srv.call(req).map(|res| {
-                    println!("Response: {:?}", res);
-                    res
-                })
-            })
+            // .wrap_fn(|req, srv| {
+            //     println!("Request: {:?}", req);
+            //     srv.call(req).map(|res| {
+            //         println!("Response: {:?}", res);
+            //         res
+            //     })
+            // })
             .service(back)
             .service(login)
             .service(register)
