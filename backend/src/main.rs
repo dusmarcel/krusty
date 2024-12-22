@@ -5,7 +5,7 @@ include!("../secret_key.rs");
 use std::sync::Mutex;
 
 use actix_web::{cookie::Key, web, App, HttpServer};
-use actix_cors::Cors;
+// use actix_cors::Cors;
 use actix_session::{config::PersistentSession, storage::RedisSessionStore, SessionMiddleware};
 
 use backend::{
@@ -45,7 +45,7 @@ async fn main() -> std::io::Result<()> {
         //     .supports_credentials()
         //     .max_age(3600);
 
-        let cors = Cors::permissive(); // DELETE ME!!! Only for testing purposes
+        // let cors = Cors::permissive(); // DELETE ME!!! Only for testing purposes
 
         App::new()
             .app_data(web::Data::clone(&data))
@@ -58,7 +58,7 @@ async fn main() -> std::io::Result<()> {
                     )
                     .build()
             )
-            .wrap(cors)
+            // .wrap(cors)
             .service(back)
             .service(login)
             .service(register)
