@@ -31,7 +31,7 @@ async fn login(backend: web::Data<Mutex<Backend>>, session: Session, form: web::
                         Ok(hash) => {
                             match Argon2::default().verify_password(form.password.as_bytes(), &hash) {
                                 Ok(_) => {
-                                    session.renew();
+                                    //session.renew();
                                     match session.insert("id", user.id.to_string()) {
                                         Ok(_) => {
                                             println!("Login succesful!");
