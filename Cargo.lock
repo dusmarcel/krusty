@@ -525,6 +525,7 @@ dependencies = [
  "anyhow",
  "argon2",
  "async-std",
+ "futures-util",
  "openssl",
  "password-hash",
  "serde",
