@@ -17,7 +17,7 @@ struct FormData {
 async fn login(backend: web::Data<Mutex<Backend>>, session: Session, form: web::Form<FormData>) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     let result = sqlx::query_as::<_, User>(
-            "SELECT * FROM users WHERE name = $1"
+            "SELECT * FROM users WHERE preferred_username = $1"
         )
         .bind(&form.username)
         .fetch_optional(&my_backend.pool)

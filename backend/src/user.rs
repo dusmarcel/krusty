@@ -23,7 +23,7 @@ async fn user(backend: web::Data<Mutex<Backend>>, path: web::Path<String>) -> Re
     let my_backend = backend.lock().unwrap();
     let user = path.into_inner();
     let result = sqlx::query_as::<_, User>(
-        "SELECT * FROM users WHERE name = $1"
+        "SELECT * FROM users WHERE preferred_username = $1"
     )
     .bind(&user)
     .fetch_optional(&my_backend.pool)

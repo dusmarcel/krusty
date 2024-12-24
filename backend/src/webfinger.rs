@@ -45,7 +45,7 @@ async fn webfinger(backend: web::Data<Mutex<Backend>>, query: web::Query<Resourc
                         if acct_parts.len() == 2 {
                             if let Some(first_part) = acct_parts.get(0) {
                                 let result = sqlx::query_as::<_, User>(
-                                        "SELECT * FROM users WHERE name = $1"
+                                        "SELECT * FROM users WHERE preferred_username = $1"
                                     )
                                     .bind(*first_part)
                                     .fetch_optional(&my_backend.pool)
