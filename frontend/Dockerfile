@@ -10,7 +10,7 @@ RUN rustup target add wasm32-unknown-unknown
 RUN cargo install wasm-bindgen-cli
 RUN cargo install trunk
 COPY . .
-RUN trunk build --release
+RUN cd frontend && trunk build --release
 
 FROM nginx:alpine-slim AS final
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
