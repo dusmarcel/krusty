@@ -12,7 +12,7 @@ use backend::{
     login::login,
     logout::logout,
     register::{register, registration_allowed},
-    user::user,
+    user::{user, b_user},
     users::users,
     webfinger::webfinger
 };
