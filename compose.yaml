@@ -43,8 +43,8 @@ services:
   frontend:
     container_name: frontend
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
       args:
         BACKEND_PROTOCOL: $BACKEND_PROTOCOL
         BACKEND_HOST: $BACKEND_HOST
