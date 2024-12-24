@@ -54,6 +54,7 @@ async fn main() -> std::io::Result<()> {
             .service(register)
             .service(registration_allowed)
             .service(user)
+            .service(b_user)
             .service(users)
             .service(webfinger)
     })
