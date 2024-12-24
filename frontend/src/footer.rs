@@ -10,16 +10,22 @@ pub struct FooterProps {
 
 #[function_component(Footer)]
 pub fn footer(props: &FooterProps) -> Html {
-    match &props.user {
-        Some(_user) => {
-            html! {
-                <a href="./back/logout">{"Logout"}</a>
+    html! {
+        <p>
+            {
+                match &props.user {
+                    Some(_user) => {
+                        html! {
+                            <a href="./back/logout">{"Logout"}</a>
+                        }
+                    }
+                    None => {
+                        html! {
+                            <a href="./login">{"Login"}</a>
+                        }
+                    }
+                }
             }
-        }
-        None => {
-            html! {
-                <a href="./login">{"Login"}</a>
-            }
-        }        
+        </p>     
     }
 }

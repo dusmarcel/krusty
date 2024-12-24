@@ -44,7 +44,7 @@ pub fn home() -> Html {
     html! {
         <>
             <Header user={(*user).clone()} />
-            <button onclick={onclick}>{ "Say hello!" }</button>
+            <button onclick={onclick}>{ " Click! " }</button>
             <Footer user={(*user).clone()} />
         </>
     }
