@@ -80,7 +80,7 @@ async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Resp
 
                 match result {
                     Ok(res) => {
-                        HttpResponse::Ok().body(format!("Hello, {}!", res.unwrap().name))
+                        HttpResponse::Ok().body(format!("Hello, {}!", res.unwrap().preferred_username))
                     }
                     Err(e) => {
                         eprintln!("Error while executing query: {}", e);

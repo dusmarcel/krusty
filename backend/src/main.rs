@@ -3,7 +3,6 @@ include!("../backend_config.rs");
 include!("../secret_key.rs");
 
 use std::sync::Mutex;
-//use futures_util::future::FutureExt;
 use actix_web::{cookie::Key, web, App, HttpServer};
 use actix_session::{config::PersistentSession, storage::RedisSessionStore, SessionMiddleware};
 
@@ -49,13 +48,6 @@ async fn main() -> std::io::Result<()> {
                     )
                     .build()
             )
-            // .wrap_fn(|req, srv| {
-            //     println!("Request: {:?}", req);
-            //     srv.call(req).map(|res| {
-            //         println!("Response: {:?}", res);
-            //         res
-            //     })
-            // })
             .service(back)
             .service(login)
             .service(logout)

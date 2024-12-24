@@ -2,8 +2,13 @@ include!("../backend_config.rs");
 use yew::prelude::*;
 use gloo_net::http::Request;
 
+use crate::{footer::Footer, header::Header};
+use shared::user::User;
+
 #[function_component(Home)]
 pub fn home() -> Html {
+    let user: UseStateHandle<Option<User>> = use_state(|| None);
+    //let user: Option<User> = None;
     let request_result = use_state(|| "No result yet. Try clicking on \"Say hello!\"".to_string());
     let result = request_result.clone();
 
@@ -30,9 +35,10 @@ pub fn home() -> Html {
 
     html! {
         <>
-            <h1>{ "Hello, Krusty!" }</h1>
+            <Header user={(*user).clone()} />
             <button onclick={onclick}>{ "Say hello!" }</button>
             <p>{ format!("{}", *result) }</p>
+            <Footer user={(*user).clone()} />
         </>
     }
 }

@@ -38,6 +38,11 @@ pub fn register() -> Html {
                             </label>
                         </p>
                         <p>
+                            <label>{ "E-Mail-Address:" }
+                                <input type="email" placeholder="Enter E-Mail-Address" name="email" />
+                            </label>
+                        </p>
+                        <p>
                             <label>{ "Passwort:" }
                                 <input type="password" placeholder="Enter Password" name="password" />
                             </label>

@@ -298,9 +298,9 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "anyhow"
-version = "1.0.94"
+version = "1.0.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1fd03a028ef38ba2276dce7e33fcd6369c158a1bca17946c4b1b701891c1ff7"
+checksum = "34ac096ce696dc2fcabef30516bb13c0a68a11d30131d3df6f04711467681b04"
 
 [[package]]
 name = "anymap2"
@@ -1060,6 +1060,7 @@ version = "0.1.0"
 dependencies = [
  "gloo-net 0.6.0",
  "js-sys",
+ "shared",
  "wasm-bindgen-futures",
  "web-sys",
  "yew",
@@ -2872,6 +2873,7 @@ name = "shared"
 version = "0.1.0"
 dependencies = [
  "serde",
+ "uuid",
 ]
 
 [[package]]
@@ -3511,6 +3513,7 @@ checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
 dependencies = [
  "getrandom",
  "rand",
+ "serde",
 ]
 
 [[package]]

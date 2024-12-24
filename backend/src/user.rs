@@ -8,7 +8,12 @@ use crate::{Backend, actor::Actor};
 #[derive(Debug, sqlx::FromRow)]
 pub struct User {
     pub id: Uuid,
-    pub name: String,
+    pub email: String,
+    pub name: Option<String>,
+    pub preferred_username: String,
+    pub summary: Option<String>,
+    pub private_key: String,
+    pub public_key: String,
     pub salt: String,
     pub hash: String
 }
@@ -28,7 +33,8 @@ async fn user(backend: web::Data<Mutex<Backend>>, path: web::Path<String>) -> Re
         Ok(res) => {
             match res {
                 Some(r) => {
-                    if let Ok(actor) = Actor::new(&my_backend.host, &Some(r.name)) {
+                    if let Some(host) = &my_backend.host {
+                        let actor = Actor::new(&host, &r);
                         Ok(web::Json(actor.to_shared()))
                     } else {
                         Err(error::ErrorInternalServerError("Internal server error!"))
@@ -42,6 +48,19 @@ async fn user(backend: web::Data<Mutex<Backend>>, path: web::Path<String>) -> Re
         Err(e) => {
             eprintln!("Error: {}", e);
             Err(error::ErrorInternalServerError("Internal server error!"))
+        }
+    }
+}
+
+impl User {
+    pub fn to_shared(&self) -> shared::user::User {
+        shared::user::User {
+            id: self.id,
+            email: self.email.clone(),
+            name: self.name.clone(),
+            preferred_username: self.preferred_username.clone(),
+            summary: self.summary.clone(),
+            public_key: self.public_key.clone()
         }
     }
 }

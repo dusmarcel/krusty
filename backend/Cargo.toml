@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 actix-session = { version = "0.10.1", features = ["cookie-session", "redis-session-native-tls"] }
 actix-web = "4.9.0"
-anyhow = "1.0.93"
+anyhow = "1.0.95"
 argon2 = "0.5.3"
 async-std = "1.13.0"
 openssl = "0.10.68"
