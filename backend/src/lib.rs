@@ -70,7 +70,6 @@ async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Resp
     if let Ok(id) =  session.get::<String>("id") {
         if let Some(id) = id {
             if let Ok(id) = Uuid::parse_str(&id) {
-                println!("Session id: {:?}", id.to_string());
                 let result = sqlx::query_as::<_, User>(
                     "SELECT * FROM users WHERE id = $1"
                 )
