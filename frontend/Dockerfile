@@ -1,5 +1,5 @@
 FROM rust:latest AS build
-WORKDIR /app
+WORKDIR /build
 ARG BACKEND_PROTOCOL
 ARG BACKEND_HOST
 ARG BACKEND_PORT
@@ -14,4 +14,4 @@ RUN cd frontend && trunk build --release
 
 FROM nginx:alpine-slim AS final
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /build/frontend/dist /usr/share/nginx/html
