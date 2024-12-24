@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use actix_web::{error, get, web, Responder, Result};
+use actix_web::{error, get, web, HttpResponse, Responder, Result};
 use actix_session::Session;
 use uuid::Uuid;
 
@@ -67,7 +67,7 @@ impl User {
 }
 
 #[get("/back/user")]
-async fn b_user(backend: web::Data<Mutex<Backend>>, session: Session) -> Option<impl Responder> {
+async fn b_user(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
         if let Some(id) = id {
@@ -79,25 +79,11 @@ async fn b_user(backend: web::Data<Mutex<Backend>>, session: Session) -> Option<
                     .fetch_optional(&my_backend.pool)
                     .await;
 
-                match result {
-                    Ok(res) => {
-                        match res {
-                            Some(r) => Some(web::Json(r.to_shared())),
-                            None => None,
-                        }
-                    }                  
-                    Err(e) => {
-                        eprintln!("Error while executing database query: {}", e);
-                        None
-                    }
+                if let Ok(Some(u)) = result {
+                    return HttpResponse::Ok().json(u.to_shared())
                 }
-            } else {
-                None
             }
-        } else {
-            None
         }
-    } else {
-        None
     }
+    HttpResponse::Ok().body("")
 }
