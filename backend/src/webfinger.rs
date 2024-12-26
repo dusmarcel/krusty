@@ -31,7 +31,7 @@ pub struct Resource {
     pub resource: String,
 }
 
-#[get("/.well-known/webfinger")]
+#[get("/webfinger")]
 async fn webfinger(backend: web::Data<Mutex<Backend>>, query: web::Query<Resource>) -> Result<impl Responder> {
     let my_backend = backend.lock().unwrap();
     let resource = query.into_inner().resource;
