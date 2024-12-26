@@ -16,7 +16,7 @@ struct FormData {
     password: String
 }
 
-#[post("/back/register")]
+#[post("/register")]
 async fn register(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>) -> Result<impl Responder> {
     let mut my_backend = backend.lock().unwrap();
     if my_backend.registration_allowed {
@@ -78,7 +78,7 @@ async fn register(backend: web::Data<Mutex<Backend>>, form: web::Form<FormData>)
     }
 }
 
-#[get("/back/registration_allowed")]
+#[get("/registration_allowed")]
 async fn registration_allowed(backend: web::Data<Mutex<Backend>>) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     web::Json(my_backend.registration_allowed)

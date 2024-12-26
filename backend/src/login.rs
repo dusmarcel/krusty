@@ -13,7 +13,7 @@ struct FormData {
     password: String
 }
 
-#[post("/back/login")]
+#[post("/login")]
 async fn login(backend: web::Data<Mutex<Backend>>, session: Session, form: web::Form<FormData>) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     let result = sqlx::query_as::<_, User>(

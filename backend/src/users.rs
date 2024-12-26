@@ -4,7 +4,7 @@ use actix_web::{get, web, Responder, Result};
 
 use crate::Backend;
 
-#[get("/back/users")]
+#[get("/users")]
 async fn users(backend: web::Data<Mutex<Backend>>) -> Result<impl Responder> {
     let my_backend = backend.lock().unwrap();
     let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")

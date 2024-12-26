@@ -5,7 +5,7 @@ pub struct Object {
     pub id: String,
     #[serde(rename="type")]
     pub object_type: String,
-    pub published: Timestamp,
+    //pub published: Timestamp,
     pub attributed_to: String,
     #[serde(rename="inReplyTo")]
     pub in_reply_to: Option<String>,

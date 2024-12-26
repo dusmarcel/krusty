@@ -1,7 +1,8 @@
+include!("../backend_config.rs");
 use yew::prelude::*;
-//use gloo_net::http::Request;
+use gloo_net::http::Request;
 
-use shared::user::User;
+use shared::{user::User, activity::Activity};
 
 #[derive(Properties, PartialEq)]
 pub struct MainAreaProps {
@@ -11,6 +12,7 @@ pub struct MainAreaProps {
 
 #[function_component(MainArea)]
 pub fn main_area(props: &MainAreaProps) -> Html {
+    //let post = 
 
     let cb_post_click = Callback::from(move |_| {
     //     let result = user_clone.clone();
@@ -32,6 +34,9 @@ pub fn main_area(props: &MainAreaProps) -> Html {
                     Some(_user) => {
                         html! {
                             <>
+                                <p>
+                                    { "What's up?" }
+                                </p>
                                 <p>
                                     <textarea id="postarea" rows=16 cols=64 placeholder="What's up?" />
                                 </p>

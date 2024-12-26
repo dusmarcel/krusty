@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::object::Object;
+use crate::{actor::Actor, object::Object};
 
 #[derive(Serialize)]
 pub struct Activity {

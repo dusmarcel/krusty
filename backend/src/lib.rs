@@ -64,7 +64,8 @@ impl Backend {
     }
 }
 
-#[get("/back")]
+//#[get("/back")]
+#[get("/")]
 async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
