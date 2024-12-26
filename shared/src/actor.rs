@@ -13,5 +13,5 @@ pub struct Actor {
     pub preferred_username: String,
     pub inbox: String,
     #[serde(rename="publicKey")]
-    pub key: Key,
+    pub key: Key
 }
