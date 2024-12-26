@@ -9,8 +9,8 @@ pub struct Key {
 
 impl Key {
     pub fn new(host: &String, user: &User) -> Self {
-        let id = format!("https://{}/{}#main-key", host, user.preferred_username);
-        let owner = format!("https://{}/{}", host, user.preferred_username);
+        let id = format!("https://{}/user/{}#main-key", host, user.preferred_username);
+        let owner = format!("https://{}/user/{}", host, user.preferred_username);
         let public_key_pem = user.public_key.clone();
 
         Self {
