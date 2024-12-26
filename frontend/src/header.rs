@@ -10,21 +10,24 @@ pub struct HeaderProps {
 
 #[function_component(Header)]
 pub fn header(props: &HeaderProps) -> Html {
-    match &props.user {
-        Some(user) => {
-            html! {
-                <header>
-                    <h1>{ format!("Hello, {}!", user.preferred_username) }</h1>
-                </header>
-            }
-        }
-        None => {
-            html! {
-                <header>
-                    <h1>{ "Hello, Krusty!" }</h1>
-                </header>
-            }
-        }
-        
+    html! {
+        <header>
+            <h1>
+                {
+                    match &props.user {
+                        Some(user) => {
+                            html! {
+                                format!("Hello, {}!", user.preferred_username)
+                            }
+                        }
+                        None => {
+                            html! {
+                                "Hello, Krusty!"
+                            }
+                        }
+                    }
+                }
+            </h1>
+        </header>
     }
 }
