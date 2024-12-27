@@ -14,7 +14,8 @@ pub mod logout;
 pub mod register;
 pub mod user;
 pub mod users;
-pub mod webfinger;
+//pub mod webfinger;
+pub mod well_known;
 pub mod link;
 
 use user::User;
@@ -64,10 +65,8 @@ impl Backend {
     }
 }
 
-//#[get("/back")]
 #[get("/")]
 async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
-    eprintln!("back called!");
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
         if let Some(id) = id {

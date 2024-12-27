@@ -56,7 +56,7 @@ async fn webfinger(backend: web::Data<Mutex<Backend>>, query: web::Query<Resourc
                                         if let Some(user) = res { 
                                             if let Some(second_part) = acct_parts.get(1) {
                                                 if *second_part == host {
-                                                    Ok(web::Json(crate::webfinger::Webfinger::new(host, &user.preferred_username)))
+                                                    Ok(web::Json(Webfinger::new(host, &user.preferred_username)))
                                                 } else {
                                                     Err(error::ErrorNotFound("Not found!"))
                                                 }

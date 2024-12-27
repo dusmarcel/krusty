@@ -60,6 +60,7 @@ async fn main() -> std::io::Result<()> {
             )
             .service(
                 web::scope("/.well-known")
+                    .service(host-meta)
                     .service(webfinger)
             )
             .service(user)            
