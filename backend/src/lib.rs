@@ -67,6 +67,7 @@ impl Backend {
 //#[get("/back")]
 #[get("/")]
 async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
+    eprintln!("back called!");
     let my_backend = backend.lock().unwrap();
     if let Ok(id) =  session.get::<String>("id") {
         if let Some(id) = id {
@@ -94,7 +95,6 @@ async fn back(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Resp
             HttpResponse::Ok().body("Hello from Krusty!")
         }
     } else {
-        
         HttpResponse::Ok().body("Hello from Krusty!")
     }
 }
