@@ -509,6 +509,7 @@ dependencies = [
  "anyhow",
  "argon2",
  "async-std",
+ "mime",
  "openssl",
  "password-hash",
  "serde",
