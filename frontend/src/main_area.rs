@@ -38,7 +38,7 @@ pub fn main_area(props: &MainAreaProps) -> Html {
                                     { "What's up?" }
                                 </p>
                                 <p>
-                                    <textarea id="postarea" rows=16 cols=64 placeholder="What's up?" />
+                                    <textarea id="postarea" rows=8 cols=64 placeholder="What's up?" />
                                 </p>
                                 <p>
                                     <button onclick={cb_post_click}>{ "Post" }</button>

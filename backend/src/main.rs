@@ -14,7 +14,10 @@ use backend::{
     register::{register, registration_allowed},
     user::{user, b_user},
     users::users,
-    webfinger::webfinger
+    well_known::{
+        host_meta,
+        webfinger
+    }
 };
 
 #[actix_web::main]
@@ -60,7 +63,7 @@ async fn main() -> std::io::Result<()> {
             )
             .service(
                 web::scope("/.well-known")
-                    .service(host-meta)
+                    .service(host_meta)
                     .service(webfinger)
             )
             .service(user)            
