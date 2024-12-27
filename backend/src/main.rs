@@ -3,7 +3,7 @@ include!("../backend_config.rs");
 include!("../secret_key.rs");
 
 use std::sync::Mutex;
-use actix_web::{cookie::Key, web, App, HttpServer};
+use actix_web::{cookie::Key, middleware::Logger, web, App, HttpServer};
 use actix_session::{config::PersistentSession, storage::RedisSessionStore, SessionMiddleware};
 
 use backend::{
@@ -42,6 +42,8 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::clone(&data))
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
             .wrap(
                 SessionMiddleware::builder(redis_store.clone(), secret_key.clone())
                     .cookie_path("/".to_string())
