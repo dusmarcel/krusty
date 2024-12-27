@@ -26,10 +26,6 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
 
-    location / {
-        proxy_pass http://127.0.0.1:8162;
-    }
-
     location /back {
         proxy_pass http://127.0.0.1:8161;
     }
@@ -38,7 +34,11 @@ server {
         proxy_pass http://127.0.0.1:8161;
     }
 
-    location /.well-known/webfinger {
+    location /.well-known {
         proxy_pass http://127.0.0.1:8161;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8162;
     }
 }
