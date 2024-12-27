@@ -16,7 +16,7 @@ async fn host_meta(backend: web::Data<Mutex<Backend>>) -> impl Responder {
                 format!(
 r#"<?xml version="1.0"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
-    <Link rel="lrdd" template="https://{}/.well-known/webfinger?resource=acct:{{uri}}" />
+    <Link rel="lrdd" template="https://{}/.well-known/webfinger?resource={{uri}}" />
 </XRD>
 "#,
                     host
