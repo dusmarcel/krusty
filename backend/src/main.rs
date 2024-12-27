@@ -15,8 +15,8 @@ use backend::{
     user::{user, b_user},
     users::users,
     well_known::{
-        host_meta,
-        webfinger
+        host_meta::host_meta,
+        webfinger::webfinger
     }
 };
 
