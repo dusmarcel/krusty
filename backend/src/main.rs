@@ -5,6 +5,7 @@ include!("../secret_key.rs");
 use std::sync::Mutex;
 use actix_web::{cookie::Key, middleware::Logger, web, App, HttpServer};
 use actix_session::{config::PersistentSession, storage::RedisSessionStore, SessionMiddleware};
+use env_logger::Env;
 
 use backend::{
     Backend,
