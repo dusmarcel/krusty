@@ -32,6 +32,8 @@ async fn main() -> std::io::Result<()> {
 
     let data = web::Data::new(Mutex::new(backend));
 
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
+
     let secret_key = Key::from(SECRET_KEY.as_bytes());
     let redis_store = RedisSessionStore::new(VALKEY_URL)
         .await
