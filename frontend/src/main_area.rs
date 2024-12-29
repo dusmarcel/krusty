@@ -37,12 +37,19 @@ pub fn main_area(props: &MainAreaProps) -> Html {
                                 <p>
                                     { "What's up?" }
                                 </p>
-                                <p>
-                                    <textarea id="postarea" rows=8 cols=64 placeholder="What's up?" />
-                                </p>
-                                <p>
-                                    <button onclick={cb_post_click}>{ "Post" }</button>
-                                </p>
+                                <form>
+                                    <p>
+                                        <label>{ "Reply to:" }
+                                            <input type="text" placeholder="Enter url to the post you want to reply to" name="replyto" />
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <textarea rows=8 cols=64 placeholder="What's up?" name="posting" />
+                                    </p>
+                                    <p>
+                                        <button onclick={cb_post_click}>{ "Post" }</button>
+                                    </p>
+                                </form>
                             </>
                         }
                     }
