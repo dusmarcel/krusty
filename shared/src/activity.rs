@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{actor::Actor, object::Object};
+use crate::object::Object;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Activity {
@@ -9,6 +9,6 @@ pub struct Activity {
     pub id: String,
     #[serde(rename="type")]
     pub activity_type: String,
-    pub actor: Actor,
+    pub actor: String,
     pub object: Object
 }

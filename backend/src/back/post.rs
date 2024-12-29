@@ -20,7 +20,6 @@ struct FormData {
 }
 
 #[post("/post")]
-//async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::Form<FormData>) -> impl Responder {
 async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::Json<FormData>) -> impl Responder {
     if form.post.is_empty() {
         return HttpResponse::BadRequest().body("Post cannot be empty!");

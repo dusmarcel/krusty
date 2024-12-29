@@ -2,17 +2,14 @@ use uuid::Uuid;
 
 use crate::{
     user::User,
-    ap::{
-        actor::Actor,
-        object::Object
-    }
+    ap::object::Object
 };
 
 pub struct Activity {
     pub context: String,
     pub id: String,
     pub activity_type: String,
-    pub actor: Actor,
+    pub actor: String,
     pub object: Object
 }
 
@@ -21,7 +18,7 @@ impl Activity {
         let context = "https://www.w3.org/ns/activitystreams".to_string();
         let id = format!("https://{}/activity/{}", host, Uuid::now_v7());
         let activity_type = "Create".to_string();
-        let actor = Actor::new(host, user);
+        let actor = format!("https://{}/user/{}", host, user.preferred_username);
         let object = Object::new(host, user, in_reply_to, post);
 
         Self {
@@ -38,7 +35,7 @@ impl Activity {
             context: self.context.clone(),
             id: self.id.clone(),
             activity_type: self.activity_type.clone(),
-            actor: self.actor.to_shared(),
+            actor: self.actor.clone(),
             object: self.object.to_shared()
         }
     }
