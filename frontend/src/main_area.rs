@@ -1,8 +1,15 @@
 include!("../backend_config.rs");
+use serde::Serialize;
 use yew::prelude::*;
 use gloo_net::http::Request;
 
 use shared::{activity::Activity, user::User};
+
+#[derive(Serialize)]
+pub struct Post {
+    in_reply_to: String,
+    post: String,
+}
 
 #[derive(Properties, PartialEq)]
 pub struct MainAreaProps {
@@ -20,7 +27,19 @@ pub fn main_area(props: &MainAreaProps) -> Html {
 
         wasm_bindgen_futures::spawn_local(async move {
             let backend_url = format!("{}/back/post", BACKEND_URL.to_string());
-            match Request::post(&backend_url).send().await {
+            let post = Post {
+                in_reply_to: "Hello, ...".to_string(),
+                post: "...world!".to_string(),
+            };
+
+            let response = Request::post(&backend_url)
+                .header("Content-Type", "application/json")
+                .body(serde_json::to_string(&post).unwrap())
+                .unwrap()
+                .send()
+                .await;
+
+            match response {
                 Ok(res) => {
                     match res.json().await {
                         Ok(activity) => result.set(Some(activity)),
