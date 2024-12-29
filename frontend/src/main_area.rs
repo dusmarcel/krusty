@@ -1,5 +1,6 @@
 include!("../backend_config.rs");
 use serde::Serialize;
+use wasm_bindgen::JsCast;
 use yew::prelude::*;
 use gloo_net::http::Request;
 
@@ -29,15 +30,23 @@ pub fn main_area(props: &MainAreaProps) -> Html {
         let in_reply_to = in_reply_to.clone();
 
         Callback::from(move |event: InputEvent| {
-            in_reply_to.set(event.data());
+            let target = event.target();
+            let input = target.and_then(|t| t.dyn_into::<web_sys::HtmlInputElement>().ok());
+            if let Some(input) = input {
+                in_reply_to.set(Some(input.value()));
+            }
         })
     };
 
     let cb_content_change = {
         let content = content.clone();
-        
+
         Callback::from(move |event: InputEvent| {
-            content.set(event.data().unwrap_or(String::new()));
+            let target = event.target();
+            let input = target.and_then(|t| t.dyn_into::<web_sys::HtmlTextAreaElement>().ok());
+            if let Some(input) = input {
+                content.set(input.value());
+            }
         })
     };
 
