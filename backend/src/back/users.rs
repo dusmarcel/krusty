@@ -2,7 +2,7 @@ use std::sync::Mutex;
 
 use actix_web::{get, web, Responder, Result};
 
-use crate::Backend;
+use crate::back::Backend;
 
 #[get("/users")]
 async fn users(backend: web::Data<Mutex<Backend>>) -> Result<impl Responder> {

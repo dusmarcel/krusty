@@ -5,7 +5,7 @@ use actix_web::{http::StatusCode, post, web, Responder};
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use serde::Deserialize;
 
-use crate::{Backend, user::User};
+use crate::{back::Backend, user::User};
 
 #[derive(Deserialize)]
 struct FormData {

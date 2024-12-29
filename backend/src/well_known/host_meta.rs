@@ -3,7 +3,7 @@ use std::sync::Mutex;
 use actix_web::{get, web, HttpResponse, Responder};
 use mime;
 
-use crate::Backend;
+use crate::back::Backend;
 
 #[get("/host-meta")]
 async fn host_meta(backend: web::Data<Mutex<Backend>>) -> impl Responder {

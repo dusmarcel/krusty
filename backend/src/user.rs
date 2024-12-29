@@ -1,10 +1,9 @@
 use std::sync::Mutex;
 
-use actix_web::{error, get, web, HttpResponse, Responder, Result};
-use actix_session::Session;
+use actix_web::{error, get, web, Responder, Result};
 use uuid::Uuid;
 
-use crate::{Backend, actor::Actor};
+use crate::{back::Backend, actor::Actor};
 
 #[derive(Debug, sqlx::FromRow)]
 pub struct User {
@@ -64,26 +63,4 @@ impl User {
             public_key: self.public_key.clone()
         }
     }
-}
-
-#[get("/user")]
-async fn b_user(backend: web::Data<Mutex<Backend>>, session: Session) -> impl Responder {
-    let my_backend = backend.lock().unwrap();
-    if let Ok(id) =  session.get::<String>("id") {
-        if let Some(id) = id {
-            if let Ok(id) = Uuid::parse_str(&id) {
-                let result = sqlx::query_as::<_, User>(
-                        "SELECT * FROM users WHERE id = $1"
-                    )
-                    .bind(&id)
-                    .fetch_optional(&my_backend.pool)
-                    .await;
-
-                if let Ok(Some(u)) = result {
-                    return HttpResponse::Ok().json(u.to_shared())
-                }
-            }
-        }
-    }
-    HttpResponse::Ok().body("")
 }

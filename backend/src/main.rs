@@ -8,13 +8,15 @@ use actix_session::{config::PersistentSession, storage::RedisSessionStore, Sessi
 use env_logger::Env;
 
 use backend::{
-    Backend,
-    back,
-    login::login,
-    logout::logout,
-    register::{register, registration_allowed},
-    user::{user, b_user},
-    users::users,
+    back::{
+        Backend,
+        login::login,
+        logout::logout,
+        register::{register, registration_allowed},
+        user::user as back_user,
+        users::users
+    },
+    user::user,
     well_known::{
         host_meta::host_meta,
         webfinger::webfinger
@@ -63,7 +65,7 @@ async fn main() -> std::io::Result<()> {
                     .service(logout)
                     .service(register)
                     .service(registration_allowed)
-                    .service(b_user)
+                    .service(back_user)
                     .service(users)
             )
             .service(

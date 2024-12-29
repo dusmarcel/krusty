@@ -4,7 +4,7 @@ use serde::{Serialize, Deserialize};
 use actix_web::{error, get, web, Responder, Result};
 
 use crate::{
-    Backend,
+    back::Backend,
     user::User,
     link::Link
 };
