@@ -16,12 +16,12 @@ use crate::{
 #[derive(Deserialize)]
 struct FormData {
     in_reply_to: Option<String>,
-    post: String
+    content: String
 }
 
 #[post("/post")]
 async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::Json<FormData>) -> impl Responder {
-    if form.post.is_empty() {
+    if form.content.is_empty() {
         return HttpResponse::BadRequest().body("Post cannot be empty!");
     }
 
@@ -40,7 +40,7 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                     Ok(res) => {
                         if let Some(user) = res {
                             if let Some(host) = &my_backend.host {
-                                let activity = Activity::new(host, &user, &form.in_reply_to, &form.post);
+                                let activity = Activity::new(host, &user, &form.in_reply_to, &form.content);
                                 println!("Activity: {:?}", activity);
                                 HttpResponse::Ok().json(activity.to_shared())
                             } else {

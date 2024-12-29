@@ -15,12 +15,12 @@ pub struct Activity {
 }
 
 impl Activity {
-    pub fn new(host: &String, user: &User, in_reply_to: &Option<String>, post: &String) -> Self {
+    pub fn new(host: &String, user: &User, in_reply_to: &Option<String>, content: &String) -> Self {
         let context = "https://www.w3.org/ns/activitystreams".to_string();
         let id = format!("https://{}/activity/{}", host, Uuid::now_v7());
         let activity_type = "Create".to_string();
         let actor = format!("https://{}/user/{}", host, user.preferred_username);
-        let object = Object::new(host, user, in_reply_to, post);
+        let object = Object::new(host, user, in_reply_to, content);
 
         Self {
             context,
