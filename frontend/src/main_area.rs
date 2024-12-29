@@ -20,11 +20,23 @@ pub fn main_area(props: &MainAreaProps) -> Html {
 
         wasm_bindgen_futures::spawn_local(async move {
             let backend_url = format!("{}/back/post", BACKEND_URL.to_string());
-            let backend_msg = Request::post(&backend_url).send().await.unwrap().text().await.unwrap();
-            match serde_json::from_str(&backend_msg) {
-                Ok(user) => result.set(Some(user)),
+            match Request::post(&backend_url).send().await {
+                Ok(res) => {
+                    match res.json().await {
+                        Ok(activity) => result.set(Some(activity)),
+                        Err(_) => result.set(None),
+                    }
+                }
                 Err(_) => result.set(None),
             }
+            
+            //let activity: Result<Activity, gloo_net::Error> = Request::post(&backend_url).send().await.unwrap().json().await;
+            //result.set(Some(activity));
+             //text().await.unwrap();
+            //match serde_json::from_str(&backend_msg) {
+            //    Ok(activity) => result.set(Some(activity)),
+            //    Err(_) => result.set(None),
+            //}
         })
     });
 
