@@ -7,8 +7,8 @@ use shared::{activity::Activity, user::User};
 
 #[derive(Serialize)]
 pub struct Post {
-    in_reply_to: String,
-    post: String,
+    in_reply_to: Option<String>,
+    content: String,
 }
 
 #[derive(Properties, PartialEq)]
@@ -22,14 +22,37 @@ pub fn main_area(props: &MainAreaProps) -> Html {
     let activity: UseStateHandle<Option<Activity>> = use_state(|| None);
     let result = activity.clone();
 
+    let in_reply_to = use_state(|| None);
+    let content = use_state(|| String::new());
+
+    let cb_in_reply_to_change = {
+        let in_reply_to = in_reply_to.clone();
+
+        Callback::from(move |event: InputEvent| {
+            in_reply_to.set(event.data());
+        })
+    };
+
+    let cb_content_change = {
+        let content = content.clone();
+        
+        Callback::from(move |event: InputEvent| {
+            content.set(event.data().unwrap_or(String::new()));
+        })
+    };
+
     let cb_post_click = Callback::from(move |_| {
         let result = activity.clone();
+        let in_reply_to = in_reply_to.clone();
+        let content = content.clone();
 
         wasm_bindgen_futures::spawn_local(async move {
             let backend_url = format!("{}/post", BACKEND_URL.to_string());
+            let in_reply_to = (*in_reply_to).clone();
+            let content = (*content).clone();
             let post = Post {
-                in_reply_to: "Hello, ...".to_string(),
-                post: "...world!".to_string(),
+                in_reply_to,
+                content,
             };
 
             let response = Request::post(&backend_url)
@@ -67,11 +90,11 @@ pub fn main_area(props: &MainAreaProps) -> Html {
                                 <form>
                                     <p>
                                         <label>{ "Reply to:" }
-                                            <input type="text" placeholder="Enter url to the post you want to reply to" name="replyto" />
+                                            <input type="text" placeholder="Enter url to the post you want to reply to" name="in_reply_to" oninput={cb_in_reply_to_change} />
                                         </label>
                                     </p>
                                     <p>
-                                        <textarea rows=8 cols=64 placeholder="What's up?" name="posting" />
+                                        <textarea rows=8 cols=64 placeholder="What's up?" name="posting" oninput={cb_content_change} />
                                     </p>
                                     <p>
                                         <button type="button" onclick={cb_post_click}>{ "Post" }</button>
