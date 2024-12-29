@@ -5,6 +5,7 @@ use crate::{
     ap::object::Object
 };
 
+#[derive(Debug)]
 pub struct Activity {
     pub context: String,
     pub id: String,

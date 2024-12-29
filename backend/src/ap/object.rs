@@ -2,6 +2,7 @@ use uuid::Uuid;
 
 use crate::user::User;
 
+#[derive(Debug)]
 pub struct Object {
     pub id: String,
     pub object_type: String,
