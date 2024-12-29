@@ -10,6 +10,7 @@ use env_logger::Env;
 use backend::{
     back::{
         Backend,
+        back,
         login::login,
         logout::logout,
         register::{register, registration_allowed},
