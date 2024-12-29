@@ -26,7 +26,7 @@ pub fn main_area(props: &MainAreaProps) -> Html {
         let result = activity.clone();
 
         wasm_bindgen_futures::spawn_local(async move {
-            let backend_url = format!("{}/back/post", BACKEND_URL.to_string());
+            let backend_url = format!("{}/post", BACKEND_URL.to_string());
             let post = Post {
                 in_reply_to: "Hello, ...".to_string(),
                 post: "...world!".to_string(),
@@ -48,14 +48,6 @@ pub fn main_area(props: &MainAreaProps) -> Html {
                 }
                 Err(_) => result.set(None),
             }
-            
-            //let activity: Result<Activity, gloo_net::Error> = Request::post(&backend_url).send().await.unwrap().json().await;
-            //result.set(Some(activity));
-             //text().await.unwrap();
-            //match serde_json::from_str(&backend_msg) {
-            //    Ok(activity) => result.set(Some(activity)),
-            //    Err(_) => result.set(None),
-            //}
         })
     });
 
