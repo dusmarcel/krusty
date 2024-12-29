@@ -27,16 +27,21 @@ use backend::{
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
+
+    let json_cfg = web::JsonConfig::default()
+        .limit(4096)
+        .error_handler(|err, _req| {
+            actix_web::error::InternalError::from_response(err, actix_web::HttpResponse::BadRequest().finish()).into()
+        });
+
     let backend = Backend::new()
         .await
         .map_err(|e| {
             eprintln!("I cannot work under these conditions! Error while building backend: {}", e);
             std::io::Error::new(std::io::ErrorKind::Other, format!("backend error: {}", e))        
         })?;
-
     let data = web::Data::new(Mutex::new(backend));
-
-    env_logger::init_from_env(Env::default().default_filter_or("info"));
 
     let secret_key = Key::from(SECRET_KEY.as_bytes());
     let redis_store = RedisSessionStore::new(VALKEY_URL)
@@ -48,6 +53,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .app_data(json_cfg.clone())
             .app_data(web::Data::clone(&data))
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
