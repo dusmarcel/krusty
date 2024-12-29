@@ -41,7 +41,7 @@ pub fn main_area(props: &MainAreaProps) -> Html {
 
             match response {
                 Ok(res) => {
-                    match res.json().await {
+                    match res.json::<Activity>().await {
                         Ok(activity) => result.set(Some(activity)),
                         Err(_) => result.set(None),
                     }
