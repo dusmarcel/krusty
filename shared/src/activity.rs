@@ -1,8 +1,8 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{actor::Actor, object::Object};
 
-#[derive(Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Activity {
     #[serde(rename="@context")]
     pub context: String,
@@ -10,6 +10,5 @@ pub struct Activity {
     #[serde(rename="type")]
     pub activity_type: String,
     pub actor: Actor,
-    #[serde(rename="preferredUsername")]
     pub object: Object
 }

@@ -1,4 +1,4 @@
-//pub mod register;
-//pub mod user;
+pub mod activity;
 pub mod actor;
 mod key;
+mod object;

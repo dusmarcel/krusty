@@ -6,7 +6,9 @@ use anyhow::Result;
 use actix_session::Session;
 use actix_web::{get, HttpResponse, Responder, web};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use uuid::Uuid;
 
+pub mod post;
 pub mod register;
 pub mod user;
 pub mod users;
@@ -14,7 +16,6 @@ pub mod login;
 pub mod logout;
 
 use crate::user::User;
-use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct Backend {

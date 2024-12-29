@@ -2,7 +2,7 @@ include!("../backend_config.rs");
 use yew::prelude::*;
 use gloo_net::http::Request;
 
-use shared::{user::User, activity::Activity};
+use shared::{activity::Activity, user::User};
 
 #[derive(Properties, PartialEq)]
 pub struct MainAreaProps {
@@ -12,19 +12,20 @@ pub struct MainAreaProps {
 
 #[function_component(MainArea)]
 pub fn main_area(props: &MainAreaProps) -> Html {
-    //let post = 
+    let activity: UseStateHandle<Option<Activity>> = use_state(|| None);
+    let result = activity.clone();
 
     let cb_post_click = Callback::from(move |_| {
-    //     let result = user_clone.clone();
+        let result = activity.clone();
 
-    //     wasm_bindgen_futures::spawn_local(async move {
-    //         let backend_url = format!("{}/user", BACKEND_URL.to_string());
-    //         let backend_msg = Request::get(&backend_url).send().await.unwrap().text().await.unwrap();
-    //         match serde_json::from_str(&backend_msg) {
-    //             Ok(user) => result.set(Some(user)),
-    //             Err(_) => result.set(None),
-    //         }
-    //     })
+        wasm_bindgen_futures::spawn_local(async move {
+            let backend_url = format!("{}/back/post", BACKEND_URL.to_string());
+            let backend_msg = Request::post(&backend_url).send().await.unwrap().text().await.unwrap();
+            match serde_json::from_str(&backend_msg) {
+                Ok(user) => result.set(Some(user)),
+                Err(_) => result.set(None),
+            }
+        })
     });
 
     html! {
@@ -34,6 +35,9 @@ pub fn main_area(props: &MainAreaProps) -> Html {
                     Some(_user) => {
                         html! {
                             <>
+                                <p>
+                                    { format!("{:#?}", *result)}
+                                </p>
                                 <p>
                                     { "What's up?" }
                                 </p>
