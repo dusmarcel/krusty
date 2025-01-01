@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
 use crate::user::User;
@@ -6,7 +7,7 @@ use crate::user::User;
 pub struct Object {
     pub id: String,
     pub object_type: String,
-    pub published: String,
+    pub published: DateTime<Utc>,
     pub attributed_to: String,
     pub in_reply_to: Option<String>,
     pub content: String,
@@ -17,7 +18,7 @@ impl Object {
     pub fn new(host: &String, user: &User, in_reply_to: &Option<String>, content: &String) -> Self {
         let id = format!("https://{}/object/{}", host, Uuid::now_v7());
         let object_type = "Note".to_string();
-        let published = chrono::Utc::now().to_rfc3339();
+        let published = chrono::Utc::now();
         let attributed_to = format!("https://{}/user/{}", host, user.preferred_username);
         let in_reply_to = in_reply_to.clone();
         let content = content.clone();
