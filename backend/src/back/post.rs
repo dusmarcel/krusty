@@ -2,7 +2,11 @@ use std::sync::Mutex;
 
 use actix_web::{post, web, HttpResponse, Responder};
 use actix_session::Session;
+use base64::prelude::*;
+use chrono::Utc;
+use openssl::{hash::{Hasher, MessageDigest}, pkey::PKey, rsa::Rsa, sign::Signer};
 use serde::Deserialize;
+use serde_json;
 use uuid::Uuid;
 
 use crate::{
@@ -15,7 +19,7 @@ use crate::{
 
 #[derive(Deserialize)]
 struct FormData {
-    in_reply_to: Option<String>,
+    in_reply_to: String,
     content: String
 }
 
@@ -42,6 +46,36 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                             if let Some(host) = &my_backend.host {
                                 let activity = Activity::new(host, &user, &form.in_reply_to, &form.content);
                                 println!("Activity: {:#?}", activity);
+
+                                let mut hasher = Hasher::new(MessageDigest::sha256()).unwrap();
+                                hasher.update(serde_json::to_string(&activity.to_shared()).unwrap().as_bytes()).unwrap();
+                                let digest_bytes = hasher.finish().unwrap();
+                                let digest = format!("SHA-256={}", BASE64_STANDARD_NO_PAD.encode(digest_bytes));
+                                let date = Utc::now().to_rfc2822();
+                                let rsa = Rsa::private_key_from_pem(user.private_key.as_bytes()).unwrap();
+                                let priv_key = PKey::from_rsa(rsa).unwrap();
+                                let host = "exil.aufentha.lt"; // for testing purposes
+                                let signed_string = format!(
+                                    "(request-target): post /inbox\nhost: {}\ndate: {}\ndigest: {}\n",
+                                    host,
+                                    date,
+                                    digest
+                                );
+                                println!("String to sign: {}", signed_string);
+                                let mut signer = Signer::new(MessageDigest::sha256(), &priv_key).unwrap();
+                                signer.update(signed_string.as_bytes()).unwrap();
+                                let signature = signer.sign_to_vec().unwrap();
+                                let signature = BASE64_STANDARD_NO_PAD.encode(signature);
+
+                                let header = format!(
+                                    "keyId=\"https://{}/user/{}\",headers=\"(request-target) host date digest\",signature=\"{}\"",
+                                    host,
+                                    user.preferred_username,
+                                    signature
+                                );
+                                println!("Authorization header: {}", header);
+
+                                
                                 HttpResponse::Ok().json(activity.to_shared())
                             } else {
                                 eprintln!("Host was not set!");

@@ -9,20 +9,20 @@ pub struct Object {
     pub object_type: String,
     pub published: DateTime<Utc>,
     pub attributed_to: String,
-    pub in_reply_to: Option<String>,
+    pub in_reply_to: String,
     pub content: String,
-    pub to: Vec<String>
+    pub to: String
 }
 
 impl Object {
-    pub fn new(host: &String, user: &User, in_reply_to: &Option<String>, content: &String) -> Self {
+    pub fn new(host: &String, user: &User, in_reply_to: &String, content: &String) -> Self {
         let id = format!("https://{}/object/{}", host, Uuid::now_v7());
         let object_type = "Note".to_string();
         let published = chrono::Utc::now();
         let attributed_to = format!("https://{}/user/{}", host, user.preferred_username);
         let in_reply_to = in_reply_to.clone();
         let content = content.clone();
-        let to = vec!["https://www.w3.org/ns/activitystreams#Public".to_string()];
+        let to = "https://www.w3.org/ns/activitystreams#Public".to_string();
 
         Self {
             id,

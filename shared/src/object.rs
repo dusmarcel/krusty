@@ -9,7 +9,7 @@ pub struct Object {
     pub published: DateTime<Utc>,
     pub attributed_to: String,
     #[serde(rename="inReplyTo")]
-    pub in_reply_to: Option<String>,
+    pub in_reply_to: String,
     pub content: String,
-    pub to: Vec<String>
+    pub to: String
 }
