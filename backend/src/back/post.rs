@@ -41,7 +41,7 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                         if let Some(user) = res {
                             if let Some(host) = &my_backend.host {
                                 let activity = Activity::new(host, &user, &form.in_reply_to, &form.content);
-                                println!("Activity: {:?}", activity);
+                                println!("Activity: {:#?}", activity);
                                 HttpResponse::Ok().json(activity.to_shared())
                             } else {
                                 eprintln!("Host was not set!");
