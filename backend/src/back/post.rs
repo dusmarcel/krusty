@@ -7,7 +7,7 @@ use base64::prelude::*;
 use chrono::Utc;
 use openssl::{hash::{Hasher, MessageDigest}, pkey::PKey, rsa::Rsa, sign::Signer};
 //use openssl_probe;
-use rustls::{ClientConfig, RootCertStore};
+//use rustls::{ClientConfig, RootCertStore};
 use serde::Deserialize;
 use serde_json;
 use uuid::Uuid;
@@ -57,7 +57,7 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                 let date = Utc::now().to_rfc2822();
                                 let rsa = Rsa::private_key_from_pem(user.private_key.as_bytes()).unwrap();
                                 let priv_key = PKey::from_rsa(rsa).unwrap();
-                                let post_host = "exil.aufentha.lt"; // for testing purposes
+                                let post_host = "mastodon.social"; // for testing purposes
                                 let signed_string = format!(
                                     "(request-target): post /inbox\nhost: {}\ndate: {}\ndigest: {}\n",
                                     post_host,
