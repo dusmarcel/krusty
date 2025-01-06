@@ -2,6 +2,7 @@ use std::sync::Mutex;
 
 use actix_web::{post, web, HttpResponse, Responder};
 use actix_session::Session;
+use awc::Client;
 use base64::prelude::*;
 use chrono::Utc;
 use openssl::{hash::{Hasher, MessageDigest}, pkey::PKey, rsa::Rsa, sign::Signer};
@@ -74,6 +75,27 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                     signature
                                 );
                                 println!("Authorization header: {}", header);
+
+                                let client = Client::default();
+                                let response = client.post(format!("https://{}/inbox", post_host))
+                                    .insert_header(("Host", post_host))
+                                    .insert_header(("Date", date))
+                                    .insert_header(("Digest", digest))
+                                    .insert_header(("Authorization", header))
+                                    .send_json(&activity.to_shared())
+                                    .await;
+
+                                if let Ok(response) = response {
+                                    if response.status().is_success() {
+                                        println!("Successfully posted activity!");
+                                    } else {
+                                        eprintln!("Failed to post activity: {}", response.status());
+                                        return HttpResponse::InternalServerError().body("Internal Server error!");
+                                    }
+                                } else {
+                                    eprintln!("Failed to post activity: {}", response.unwrap_err());
+                                    return HttpResponse::InternalServerError().body("Internal Server error!");
+                                }
 
                                 HttpResponse::Ok().json(activity.to_shared())
                             } else {
