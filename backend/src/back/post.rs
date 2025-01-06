@@ -6,7 +6,8 @@ use awc::Client;
 use base64::prelude::*;
 use chrono::Utc;
 use openssl::{hash::{Hasher, MessageDigest}, pkey::PKey, rsa::Rsa, sign::Signer};
-use openssl_probe;
+//use openssl_probe;
+use rustls::{ClientConfig, RootCertStore};
 use serde::Deserialize;
 use serde_json;
 use uuid::Uuid;
@@ -78,8 +79,8 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                 println!("Authorization header: {}", header);
 
                                 //openssl_probe::init_ssl_cert_env_vars();
-                                std::env::set_var("SSL_CERT_FILE", "/etc/ssl/certs/ca-certificates.crt");
-                                std::env::set_var("SSL_CERT_DIR", "/etc/ssl/certs");
+                                // std::env::set_var("SSL_CERT_FILE", "/etc/ssl/certs/ca-certificates.crt");
+                                // std::env::set_var("SSL_CERT_DIR", "/etc/ssl/certs");
                                 let client = Client::default();
                                 let response = client.post(format!("https://{}/inbox", post_host))
                                     .insert_header(("Host", post_host))
