@@ -82,7 +82,9 @@ async fn main() -> std::io::Result<()> {
                     .service(host_meta)
                     .service(webfinger)
             )
-            .service(user)            
+            .service(
+                web::scope("/user")
+                    .service(user)            )
     })
     .bind((BACKEND_IF, 8161))?
     .run()

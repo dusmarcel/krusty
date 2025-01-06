@@ -18,10 +18,11 @@ pub struct User {
     pub hash: String
 }
 
-#[get("/user/{user}")]
+#[get("/{user}")]
 async fn user(backend: web::Data<Mutex<Backend>>, path: web::Path<String>) -> Result<impl Responder> {
     let my_backend = backend.lock().unwrap();
     let user = path.into_inner();
+    let user = user.trim_end_matches(".json");
     let result = sqlx::query_as::<_, User>(
             "SELECT * FROM users WHERE preferred_username = $1"
         )
