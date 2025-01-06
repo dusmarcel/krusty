@@ -77,7 +77,9 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                 );
                                 println!("Authorization header: {}", header);
 
-                                openssl_probe::init_ssl_cert_env_vars();
+                                //openssl_probe::init_ssl_cert_env_vars();
+                                std::env::set_var("SSL_CERT_FILE", "/etc/ssl/certs/ca-certificates.crt");
+                                std::env::set_var("SSL_CERT_DIR", "/etc/ssl/certs");
                                 let client = Client::default();
                                 let response = client.post(format!("https://{}/inbox", post_host))
                                     .insert_header(("Host", post_host))
