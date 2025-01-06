@@ -54,10 +54,10 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                 let date = Utc::now().to_rfc2822();
                                 let rsa = Rsa::private_key_from_pem(user.private_key.as_bytes()).unwrap();
                                 let priv_key = PKey::from_rsa(rsa).unwrap();
-                                let host = "exil.aufentha.lt"; // for testing purposes
+                                let post_host = "exil.aufentha.lt"; // for testing purposes
                                 let signed_string = format!(
                                     "(request-target): post /inbox\nhost: {}\ndate: {}\ndigest: {}\n",
-                                    host,
+                                    post_host,
                                     date,
                                     digest
                                 );
@@ -75,7 +75,6 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                 );
                                 println!("Authorization header: {}", header);
 
-                                
                                 HttpResponse::Ok().json(activity.to_shared())
                             } else {
                                 eprintln!("Host was not set!");
