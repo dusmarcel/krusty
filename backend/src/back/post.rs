@@ -1,12 +1,11 @@
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 
 use actix_web::{post, web, HttpResponse, Responder};
 use actix_session::Session;
-use awc::Client;
 use base64::prelude::*;
 use chrono::Utc;
 use openssl::{hash::{Hasher, MessageDigest}, pkey::PKey, rsa::Rsa, sign::Signer};
-use rustls::{ClientConfig, RootCertStore};
+use reqwest;
 use serde::Deserialize;
 use serde_json;
 use uuid::Uuid;
@@ -77,21 +76,14 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                 );
                                 println!("Authorization header: {}", header);
 
-                                let client_tls_config = Arc::new(rustls_config());
-
-                                let client = Client::builder()
-                                    .connector(
-                                        awc::Connector::new()
-                                            .rustls_0_23(Arc::clone(&client_tls_config))
-                                    )
-                                    .finish();
-
+                                let client = reqwest::Client::new();
                                 let response = client.post(format!("https://{}/inbox", post_host))
-                                    .insert_header(("Host", post_host))
-                                    .insert_header(("Date", date))
-                                    .insert_header(("Digest", digest))
-                                    .insert_header(("Authorization", header))
-                                    .send_json(&activity.to_shared())
+                                    .header("Host", post_host)
+                                    .header("Date", date)
+                                    .header("Digest", digest)
+                                    .header("Authorization", header)
+                                    .json(&activity.to_shared())
+                                    .send()
                                     .await;
 
                                 if let Ok(response) = response {
@@ -132,16 +124,4 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
     } else {
         HttpResponse::Unauthorized().body("You are not logged in!")
     }
-}
-
-fn rustls_config() -> ClientConfig {
-    rustls::crypto::aws_lc_rs::default_provider()
-        .install_default()
-        .unwrap();
-
-    let root_store = RootCertStore::from_iter(webpki_roots::TLS_SERVER_ROOTS.to_owned());
-
-    rustls::ClientConfig::builder()
-        .with_root_certificates(root_store)
-        .with_no_client_auth()
 }
