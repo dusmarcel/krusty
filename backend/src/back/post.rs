@@ -90,11 +90,11 @@ async fn post(backend: web::Data<Mutex<Backend>>, session: Session, form: web::J
                                     if response.status().is_success() {
                                         println!("Successfully posted activity!");
                                     } else {
-                                        eprintln!("Failed to post activity: {}", response.status());
+                                        eprintln!("Response was ok, but not successfull: {:?}", response.status());
                                         return HttpResponse::InternalServerError().body("Internal Server error!");
                                     }
                                 } else {
-                                    eprintln!("Failed to post activity: {}", response.unwrap_err());
+                                    eprintln!("Response was not ok: {:?}", response.unwrap_err());
                                     return HttpResponse::InternalServerError().body("Internal Server error!");
                                 }
 
